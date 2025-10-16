@@ -18,7 +18,9 @@ const DashCalendarTimeline = (props: Props) => {
   const { id, setProps } = props;
 
   const [items, setItems] = useState(transformItems(props.items));
-  const [selectedItem, setSelectedItem] = useState<SelectedCalendarItemProps | undefined>(undefined);
+  const [selectedItem, setSelectedItem] = useState<SelectedCalendarItemProps | undefined>(
+    undefined,
+  );
 
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
   const minStartTime = Math.max(Math.min(...items.map((item) => item.start_time)), 1);
@@ -92,7 +94,11 @@ const DashCalendarTimeline = (props: Props) => {
         onItemDeselect={onItemDeselect}
         onItemResize={onItemResize}
       />
-      <SelectedItemInfo item={selectedItem} setProps={setProps} selectedItemProps={props.selectedItemInput} />
+      <SelectedItemInfo
+        item={selectedItem}
+        setProps={setProps}
+        selectedItemProps={props.selectedItemInput}
+      />
     </div>
   );
 };
