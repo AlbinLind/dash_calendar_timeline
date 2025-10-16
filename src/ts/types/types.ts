@@ -45,6 +45,9 @@ export type Props = {
   drag_snap?: number;
   min_zoom?: number;
   max_zoom?: number;
+
+  /** Should you only be able to resize from the ends? Defaults to true */
+  use_resize_handle?: boolean;
   // ========== Callbacks ==========
   /** The item that was clicked, if any. */
   clickedItem?: CalendarItem;

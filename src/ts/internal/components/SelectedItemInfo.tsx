@@ -6,8 +6,8 @@ export function SelectedItemInfo({ item, setProps, selectedItemProps }: Selected
   if (item == null) {
     return <></>;
   }
-  let x = item.mousePosition.x;
-  let y = item.mousePosition.y;
+  let x = item.mousePosition.x + 5;
+  let y = item.mousePosition.y + 5;
 
   return (
     <div

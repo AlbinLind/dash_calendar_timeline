@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
+import "../styles/base.css";
 import { SelectedItemInfo } from "../internal/components/SelectedItemInfo";
 import { CalendarItem, Props, SelectedCalendarItemProps } from "types/types";
 
 function transformItems(items: CalendarItem[]): CalendarItem[] {
   return items.map((item) => ({
+    canResize: "both",
     ...item,
   }));
 }
@@ -48,9 +50,26 @@ const DashCalendarTimeline = (props: Props) => {
     setProps({ items: items });
   };
 
-  const onItemSelect = (itemId: string | number, e: React.MouseEvent, time: number) => {
+  const onItemSelect = (itemId: string | number, e: React.MouseEvent) => {
     // Only respond to left clicks
     if (e.button !== 0) {
+      return;
+    }
+    if (selectedItem && selectedItem.id !== itemId) {
+      setProps({ clickedItem: undefined });
+      setSelectedItem(undefined);
+      return;
+    }
+  };
+
+  const onItemClick = (itemId: string | number, e: React.MouseEvent, time: number) => {
+    // Only respond to left clicks
+    if (e.button !== 0) {
+      return;
+    }
+    if (selectedItem && selectedItem.id === itemId) {
+      setProps({ clickedItem: undefined });
+      setSelectedItem(undefined);
       return;
     }
     const item = items.find((item) => item.id === itemId);
@@ -60,6 +79,7 @@ const DashCalendarTimeline = (props: Props) => {
       mousePosition: { x: e.clientX, y: e.clientY },
     } as SelectedCalendarItemProps);
   };
+
   const onItemDeselect = () => {
     setSelectedItem(undefined);
     setProps({ clickedItem: undefined });
@@ -89,8 +109,10 @@ const DashCalendarTimeline = (props: Props) => {
         dragSnap={props.drag_snap}
         minZoom={props.min_zoom}
         maxZoom={props.max_zoom}
+        useResizeHandle={props.use_resize_handle ? false : true}
         onItemMove={onItemMove}
-        onItemClick={onItemSelect}
+        onItemSelect={onItemSelect}
+        onItemClick={onItemClick}
         onItemDeselect={onItemDeselect}
         onItemResize={onItemResize}
       />

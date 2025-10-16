@@ -1,0 +1,8 @@
+.rct-item:hover {
+  .rct-item-handler-right {
+    cursor: e-resize !important;
+  }
+  .rct-item-handler-left {
+    cursor: w-resize !important;
+  }
+}

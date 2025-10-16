@@ -141,7 +141,10 @@ class DashCalendarTimeline(Component):
 
     - min_zoom (number; optional)
 
-    - selectedItemInput (dict with strings as keys and values of type boolean | number | string | dict | list; optional)"""
+    - selectedItemInput (dict with strings as keys and values of type boolean | number | string | dict | list; optional)
+
+    - use_resize_handle (boolean; optional):
+        Should you only be able to resize from the ends? Defaults to True."""
 
     _children_props = []
     _base_nodes = ["children"]
@@ -223,6 +226,7 @@ class DashCalendarTimeline(Component):
         drag_snap: typing.Optional[NumberType] = None,
         min_zoom: typing.Optional[NumberType] = None,
         max_zoom: typing.Optional[NumberType] = None,
+        use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
             typing.Dict[typing.Union[str, float, int], typing.Any]
@@ -241,6 +245,7 @@ class DashCalendarTimeline(Component):
             "max_zoom",
             "min_zoom",
             "selectedItemInput",
+            "use_resize_handle",
         ]
         self._valid_wildcard_attributes = []
         self.available_properties = [
@@ -254,6 +259,7 @@ class DashCalendarTimeline(Component):
             "max_zoom",
             "min_zoom",
             "selectedItemInput",
+            "use_resize_handle",
         ]
         self.available_wildcard_properties = []
         _explicit_args = kwargs.pop("_explicit_args")
