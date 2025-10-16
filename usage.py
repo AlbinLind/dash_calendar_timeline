@@ -15,6 +15,14 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "end_time": datetime.datetime(2025, 1, 2, 2, 28).timestamp() * 1000,
             "group": 0,
             "hoverInfo": "<b>Bold hover info</b><br>This is some hover info",
+            "inputs": {
+                "Is true or False": {"type": "checkbox", "id": "checkbox-1"},
+                "A text field": {
+                    "type": "text",
+                    "id": "text-1",
+                    "placeholder": "Enter text",
+                },
+            },
         },
         {
             "id": 2,
@@ -56,6 +64,16 @@ def display_output(items):
 )
 def display_clicked_item(item):
     pp(item)
+    return dash.no_update
+
+
+@app.callback(
+    dash.Output("component", "selectedItemInput"),
+    dash.Input("component", "selectedItemInput"),
+    prevent_initial_call=True,
+)
+def display_selected_item_input(selected_item_input):
+    pp(selected_item_input)
     return dash.no_update
 
 

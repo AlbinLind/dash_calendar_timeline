@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { DashComponentProps } from "../props";
+import { DashComponentProps, setPropsType } from "../props";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
 
 type ItemPropsType = {
   className?: string;
-  style?: React.CSSProperties;
+  //style?: React.CSSProperties;
+  /**
+   * Dict with CSS styles to apply to the item
+   */
+  style?: Record<string, any>;
 };
 
 type CalendarItem = {
@@ -37,6 +41,7 @@ type CalendarItem = {
 
 type SelectedCalendarItemProps = {
   mousePosition: { x: number; y: number };
+  inputs?: { [key: string]: React.InputHTMLAttributes<HTMLInputElement> };
 } & CalendarItem;
 
 type Group = {
@@ -58,8 +63,10 @@ type Props = {
   drag_snap?: number;
   min_zoom?: number;
   max_zoom?: number;
+  // ========== Callbacks ==========
   /** The item that was clicked, if any. */
   clickedItem?: CalendarItem;
+  selectedItemInput?: Record<string, any>;
 } & DashComponentProps;
 
 function transformItems(items: CalendarItem[]): CalendarItem[] {
@@ -146,12 +153,24 @@ const DashCalendarTimeline = (props: Props) => {
         onItemClick={onItemSelect}
         onItemDeselect={onItemDeselect}
       />
-      <SelectedItemInfo item={selectedItem} />
+      <SelectedItemInfo
+        item={selectedItem}
+        setProps={setProps}
+        selectedItemProps={props.selectedItemInput}
+      />
     </div>
   );
 };
 
-function SelectedItemInfo({ item }: { item?: SelectedCalendarItemProps }) {
+function SelectedItemInfo({
+  item,
+  setProps,
+  selectedItemProps,
+}: {
+  item?: SelectedCalendarItemProps;
+  setProps: setPropsType;
+  selectedItemProps?: Record<string, any>;
+}) {
   console.log("Rendering SelectedItemInfo with item:", item);
   if (item == null) {
     return <></>;
@@ -179,6 +198,33 @@ function SelectedItemInfo({ item }: { item?: SelectedCalendarItemProps }) {
       {item.hoverInfo && (
         <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>
       )}
+      {/*Dynamically add inputs and update props*/}
+      {item.inputs &&
+        Object.entries(item.inputs).map(([key, input], index) => {
+          return (
+            <div key={index}>
+              <label htmlFor={input.id}>{key}</label>
+              <input
+                {...input}
+                onChange={(e) => {
+                  if (input.onChange) {
+                    input.onChange(e);
+                  }
+                  const value =
+                    e.target.type === "checkbox"
+                      ? e.target.checked
+                      : e.target.value;
+                  setProps({
+                    selectedItemInput: {
+                      ...selectedItemProps,
+                      [key]: value,
+                    },
+                  });
+                }}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 }
