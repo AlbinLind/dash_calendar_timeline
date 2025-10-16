@@ -33,6 +33,9 @@ class DashCalendarTimeline(Component):
     - default_time_start (number; optional):
         Default start time for the timeline.
 
+    - drag_snap (number; optional):
+        Snap dragged items to a time interval (in milliseconds).
+
     - groups (list of dicts; required)
 
         `groups` is a list of dicts with keys:
@@ -63,19 +66,24 @@ class DashCalendarTimeline(Component):
         - end_time (number; required):
             Unix timestamp in milliseconds.
 
-        - can_move (boolean; optional):
+        - canMove (boolean; optional):
             Can the item be moved.
 
-        - can_resize (optional):
+        - canResize (optional):
             Can the item be resized at all, and if so, can all or only one
-            edge be resized?.
+            edge be resized?  You cannot disable resizing. This is becuase
+            dash does not generate literal unions with primitive types
+            well. See https://github.com/plotly/dash/issues/3017 \"both\":
+            can be resized at both edges \"left\": can only be resized at
+            the left edge \"right\": can only be resized at the right
+            edge.
 
-        - can_change_group (boolean; optional):
+        - canChangeGroup (boolean; optional):
             Can the item be moved to a different group?.
 
-        - item_props (dict; optional)
+        - itemProps (dict; optional)
 
-            `item_props` is a dict with keys:
+            `itemProps` is a dict with keys:
 
             - className (string; optional)
 
@@ -1157,7 +1165,7 @@ class DashCalendarTimeline(Component):
                     **Syntax**: `auto | bar | block | underscore`
                     **Initial value**: `auto`.
 
-                - clear (a value equal to: 'left', 'right', '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'both', 'none', 'inline-end', 'inline-start'; optional):
+                - clear (a value equal to: 'left', 'right', 'both', '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'none', 'inline-end', 'inline-start'; optional):
                     The **`clear`** CSS property sets whether an element
                     must be moved below (cleared) floating elements that
                     precede it. The `clear` property applies to floating
@@ -3326,7 +3334,7 @@ class DashCalendarTimeline(Component):
                     **11** | **1.5** | **9**  | **12** | **8** |
                     @,see,https,://developer.mozilla.org/docs/Web/CSS/quotes.
 
-                - resize (a value equal to: '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'both', 'none', 'block', 'inline', 'horizontal', 'vertical'; optional):
+                - resize (a value equal to: 'both', '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'none', 'block', 'inline', 'horizontal', 'vertical'; optional):
                     The **`resize`** CSS property sets whether an element
                     is resizable, and if so, in which directions.
                     **Syntax**: `none | both | horizontal | vertical |
@@ -6118,7 +6126,7 @@ class DashCalendarTimeline(Component):
                     break-all | keep-all | break-word`  **Initial value**:
                     `normal`.
 
-                - msWrapFlow (a value equal to: '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'auto', 'end', 'start', 'both', 'clear', 'maximum'; optional):
+                - msWrapFlow (a value equal to: 'both', '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'auto', 'end', 'start', 'clear', 'maximum'; optional):
                     The **`-ms-wrap-flow`** CSS property is a Microsoft
                     extension that specifies how exclusions impact inline
                     content within block-level elements.  **Syntax**:
@@ -7994,7 +8002,11 @@ class DashCalendarTimeline(Component):
 
                 - textAnchor (a value equal to: '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'end', 'start', 'middle'; optional)
 
-                - vectorEffect (a value equal to: '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'none', 'non-scaling-stroke'; optional)"""
+                - vectorEffect (a value equal to: '-moz-initial', 'inherit', 'initial', 'revert', 'revert-layer', 'unset', 'none', 'non-scaling-stroke'; optional)
+
+    - max_zoom (number; optional)
+
+    - min_zoom (number; optional)"""
 
     _children_props = []
     _base_nodes = ["children"]
@@ -8324,6 +8336,7 @@ class DashCalendarTimeline(Component):
             ],
             "animationFillMode": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -8331,7 +8344,6 @@ class DashCalendarTimeline(Component):
                     Literal["revert-layer"],
                     Literal["unset"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                 ]
@@ -11227,13 +11239,13 @@ class DashCalendarTimeline(Component):
                 Literal[
                     "left",
                     "right",
+                    "both",
                     "-moz-initial",
                     "inherit",
                     "initial",
                     "revert",
                     "revert-layer",
                     "unset",
-                    "both",
                     "none",
                     "inline-end",
                     "inline-start",
@@ -13636,13 +13648,13 @@ class DashCalendarTimeline(Component):
             ],
             "resize": NotRequired[
                 Literal[
+                    "both",
                     "-moz-initial",
                     "inherit",
                     "initial",
                     "revert",
                     "revert-layer",
                     "unset",
-                    "both",
                     "none",
                     "block",
                     "inline",
@@ -13775,13 +13787,13 @@ class DashCalendarTimeline(Component):
             ],
             "scrollSnapType": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
                     Literal["revert"],
                     Literal["revert-layer"],
                     Literal["unset"],
-                    Literal["both"],
                     Literal["none"],
                     Literal["block"],
                     Literal["inline"],
@@ -14914,6 +14926,7 @@ class DashCalendarTimeline(Component):
             ],
             "animation": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -14926,7 +14939,6 @@ class DashCalendarTimeline(Component):
                     Literal["alternate-reverse"],
                     Literal["reverse"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                     Literal["infinite"],
@@ -15904,6 +15916,7 @@ class DashCalendarTimeline(Component):
             ],
             "MozAnimationFillMode": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -15911,7 +15924,6 @@ class DashCalendarTimeline(Component):
                     Literal["revert-layer"],
                     Literal["unset"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                 ]
@@ -19736,6 +19748,7 @@ class DashCalendarTimeline(Component):
             ],
             "msWrapFlow": NotRequired[
                 Literal[
+                    "both",
                     "-moz-initial",
                     "inherit",
                     "initial",
@@ -19745,7 +19758,6 @@ class DashCalendarTimeline(Component):
                     "auto",
                     "end",
                     "start",
-                    "both",
                     "clear",
                     "maximum",
                 ]
@@ -19876,6 +19888,7 @@ class DashCalendarTimeline(Component):
             ],
             "WebkitAnimationFillMode": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -19883,7 +19896,6 @@ class DashCalendarTimeline(Component):
                     Literal["revert-layer"],
                     Literal["unset"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                 ]
@@ -20978,13 +20990,13 @@ class DashCalendarTimeline(Component):
             ],
             "WebkitScrollSnapType": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
                     Literal["revert"],
                     Literal["revert-layer"],
                     Literal["unset"],
-                    Literal["both"],
                     Literal["none"],
                     Literal["block"],
                     Literal["inline"],
@@ -22195,6 +22207,7 @@ class DashCalendarTimeline(Component):
             ],
             "MozAnimation": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -22207,7 +22220,6 @@ class DashCalendarTimeline(Component):
                     Literal["alternate-reverse"],
                     Literal["reverse"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                     Literal["infinite"],
@@ -22317,6 +22329,7 @@ class DashCalendarTimeline(Component):
             ],
             "WebkitAnimation": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -22329,7 +22342,6 @@ class DashCalendarTimeline(Component):
                     Literal["alternate-reverse"],
                     Literal["reverse"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                     Literal["infinite"],
@@ -23713,6 +23725,7 @@ class DashCalendarTimeline(Component):
             ],
             "OAnimation": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -23725,7 +23738,6 @@ class DashCalendarTimeline(Component):
                     Literal["alternate-reverse"],
                     Literal["reverse"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                     Literal["infinite"],
@@ -23776,6 +23788,7 @@ class DashCalendarTimeline(Component):
             ],
             "OAnimationFillMode": NotRequired[
                 typing.Union[
+                    Literal["both"],
                     Literal["-moz-initial"],
                     Literal["inherit"],
                     Literal["initial"],
@@ -23783,7 +23796,6 @@ class DashCalendarTimeline(Component):
                     Literal["revert-layer"],
                     Literal["unset"],
                     Literal["backwards"],
-                    Literal["both"],
                     Literal["forwards"],
                     Literal["none"],
                 ]
@@ -25298,10 +25310,12 @@ class DashCalendarTimeline(Component):
             "title": str,
             "start_time": NumberType,
             "end_time": NumberType,
-            "can_move": NotRequired[bool],
-            "can_resize": NotRequired[typing.Union[Literal["left"], Literal["right"]]],
-            "can_change_group": NotRequired[bool],
-            "item_props": NotRequired["ItemsItemProps"],
+            "canMove": NotRequired[bool],
+            "canResize": NotRequired[
+                typing.Union[Literal["left"], Literal["right"], Literal["both"]]
+            ],
+            "canChangeGroup": NotRequired[bool],
+            "itemProps": NotRequired["ItemsItemProps"],
         },
     )
 
@@ -25322,6 +25336,9 @@ class DashCalendarTimeline(Component):
         groups: typing.Optional[typing.Sequence["Groups"]] = None,
         default_time_start: typing.Optional[NumberType] = None,
         default_time_end: typing.Optional[NumberType] = None,
+        drag_snap: typing.Optional[NumberType] = None,
+        min_zoom: typing.Optional[NumberType] = None,
+        max_zoom: typing.Optional[NumberType] = None,
         id: typing.Optional[typing.Union[str, dict]] = None,
         **kwargs,
     ):
@@ -25329,16 +25346,22 @@ class DashCalendarTimeline(Component):
             "id",
             "default_time_end",
             "default_time_start",
+            "drag_snap",
             "groups",
             "items",
+            "max_zoom",
+            "min_zoom",
         ]
         self._valid_wildcard_attributes = []
         self.available_properties = [
             "id",
             "default_time_end",
             "default_time_start",
+            "drag_snap",
             "groups",
             "items",
+            "max_zoom",
+            "min_zoom",
         ]
         self.available_wildcard_properties = []
         _explicit_args = kwargs.pop("_explicit_args")

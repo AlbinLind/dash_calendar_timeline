@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DashComponentProps } from "../props";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/dist/style.css";
@@ -17,12 +17,19 @@ type CalendarItem = {
   /** Unix timestamp in milliseconds */
   end_time: number;
   /** Can the item be moved */
-  can_move?: boolean;
-  /** Can the item be resized at all, and if so, can all or only one edge be resized? */
-  can_resize?: boolean | "left" | "right";
+  canMove?: boolean;
+  /** Can the item be resized at all, and if so, can all or only one edge be resized?
+   *
+   * You cannot disable resizing. This is becuase dash does not
+   * generate literal unions with primitive types well. See https://github.com/plotly/dash/issues/3017
+   * "both": can be resized at both edges
+   * "left": can only be resized at the left edge
+   * "right": can only be resized at the right edge
+   */
+  canResize?: boolean | "left" | "right" | "both";
   /** Can the item be moved to a different group? */
-  can_change_group?: boolean;
-  item_props?: ItemPropsType;
+  canChangeGroup?: boolean;
+  itemProps?: ItemPropsType;
 };
 
 type Group = {
@@ -40,34 +47,72 @@ type Props = {
   default_time_start?: number;
   /** Default end time for the timeline */
   default_time_end?: number;
+  /** Snap dragged items to a time interval (in milliseconds) */
+  drag_snap?: number;
+  min_zoom?: number;
+  max_zoom?: number;
 } & DashComponentProps;
+
+function transformItems(items: CalendarItem[]): CalendarItem[] {
+  return items.map((item) => ({
+    ...item,
+  }));
+}
 
 /**
  * Component description
  */
 const DashCalendarTimeline = (props: Props) => {
-  const { id } = props;
+  const { id, setProps } = props;
+
+  const [items, setItems] = useState(transformItems(props.items));
 
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
   const minStartTime = Math.max(
-    Math.min(...props.items.map((item) => item.start_time), 0),
+    Math.min(...items.map((item) => item.start_time)),
     1,
   );
   const maxEndTime = Math.max(
-    ...props.items.map((item) => item.end_time),
-    20000,
+    ...items.map((item) => item.end_time),
+    1000 * 60 * 60 * 24, // 1 day
   );
-  const defaultTimeStart = props.default_time_start || minStartTime;
-  const defaultTimeEnd = props.default_time_end || maxEndTime;
-  console.log(defaultTimeStart, defaultTimeEnd);
+  // Add 12 hours of padding on each side
+  const defaultTimeStart =
+    props.default_time_start || minStartTime - 1000 * 60 * 60 * 12;
+  const defaultTimeEnd =
+    props.default_time_end || maxEndTime + 1000 * 60 * 60 * 12;
+
+  const onItemMove = (
+    itemId: string | number,
+    dragTime: number,
+    newGroupOrder: number,
+  ) => {
+    const group = props.groups[newGroupOrder];
+    setItems((items) =>
+      items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start_time: dragTime,
+              end_time: dragTime + (item.end_time - item.start_time),
+              group: group.id,
+            })
+          : item,
+      ),
+    );
+    setProps({ items: items });
+  };
 
   return (
     <div id={id}>
       <Timeline
         groups={props.groups}
-        items={props.items}
+        items={items}
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
+        dragSnap={props.drag_snap}
+        minZoom={props.min_zoom}
+        maxZoom={props.max_zoom}
+        onItemMove={onItemMove}
       />
     </div>
   );
