@@ -47,6 +47,15 @@ _js_dist.extend(
     ]
 )
 
+# Typescript prop type validation
+_js_dist.append(
+    dict(
+        dev_package_path="proptypes.js",
+        dev_only=True,
+        namespace=package_name,
+    )
+)
+
 _css_dist = []
 
 

@@ -39,6 +39,8 @@ module.exports = function (env, argv) {
         externals,
         resolve: {
             extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+            mainFields: ['module', 'main'],
+            conditionNames: ['import', 'require', 'default'],
         },
         module: {
             rules: [
