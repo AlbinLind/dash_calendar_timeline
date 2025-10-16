@@ -56,7 +56,7 @@ const DashCalendarTimeline = (props: Props) => {
       return;
     }
     if (selectedItem && selectedItem.id !== itemId) {
-      setProps({ clickedItem: undefined });
+      setProps({ clickedItem: undefined, selectedItemInput: undefined });
       setSelectedItem(undefined);
       return;
     }
@@ -68,7 +68,7 @@ const DashCalendarTimeline = (props: Props) => {
       return;
     }
     if (selectedItem && selectedItem.id === itemId) {
-      setProps({ clickedItem: undefined });
+      setProps({ clickedItem: undefined, selectedItemInput: undefined });
       setSelectedItem(undefined);
       return;
     }
@@ -82,7 +82,7 @@ const DashCalendarTimeline = (props: Props) => {
 
   const onItemDeselect = () => {
     setSelectedItem(undefined);
-    setProps({ clickedItem: undefined });
+    setProps({ clickedItem: undefined, selectedItemInput: undefined });
   };
 
   const onItemResize = (itemId: string | number, time: number, edge: "left" | "right") => {
