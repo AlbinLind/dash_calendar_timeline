@@ -45,6 +45,8 @@ export type Props = {
   drag_snap?: number;
   min_zoom?: number;
   max_zoom?: number;
+  line_height?: number;
+  item_height_ratio?: number;
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;

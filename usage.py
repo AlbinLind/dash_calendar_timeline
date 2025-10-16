@@ -15,13 +15,11 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "end_time": datetime.datetime(2025, 1, 2, 2, 28).timestamp() * 1000,
             "group": 0,
             "hoverInfo": "<b>Bold hover info</b><br>This is some hover info",
-            "inputs": {
-                "Is true or False": {"type": "checkbox", "id": "checkbox-1"},
-                "A text field": {
-                    "type": "text",
-                    "id": "text-1",
-                    "placeholder": "Enter text",
-                },
+            "itemProps": {
+                "style": {
+                    "backgroundColor": "green",
+                    "color": "white",
+                }
             },
         },
         {
@@ -38,13 +36,6 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "start_time": datetime.datetime(2025, 1, 2, 3, 57).timestamp() * 1000,
             "end_time": datetime.datetime(2025, 1, 2, 11, 42).timestamp() * 1000,
             "group": 0,
-            "inputs": {
-                "SKU": {
-                    "type": "number",
-                    "id": "number-1",
-                    "placeholder": "Enter SKU number",
-                }
-            },
         },
     ],
     groups=[

@@ -94,6 +94,8 @@ class DashCalendarTimeline(Component):
 
         - height (number; optional)
 
+    - item_height_ratio (number; optional)
+
     - items (list of dicts; required)
 
         `items` is a list of dicts with keys:
@@ -136,6 +138,8 @@ class DashCalendarTimeline(Component):
 
         - hoverInfo (string; optional):
             Hover information for the item, can be html to show.
+
+    - line_height (number; optional)
 
     - max_zoom (number; optional)
 
@@ -226,6 +230,8 @@ class DashCalendarTimeline(Component):
         drag_snap: typing.Optional[NumberType] = None,
         min_zoom: typing.Optional[NumberType] = None,
         max_zoom: typing.Optional[NumberType] = None,
+        line_height: typing.Optional[NumberType] = None,
+        item_height_ratio: typing.Optional[NumberType] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -241,7 +247,9 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "groups",
+            "item_height_ratio",
             "items",
+            "line_height",
             "max_zoom",
             "min_zoom",
             "selectedItemInput",
@@ -255,7 +263,9 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "groups",
+            "item_height_ratio",
             "items",
+            "line_height",
             "max_zoom",
             "min_zoom",
             "selectedItemInput",

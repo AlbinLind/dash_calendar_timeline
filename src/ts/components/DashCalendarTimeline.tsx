@@ -109,6 +109,8 @@ const DashCalendarTimeline = (props: Props) => {
         dragSnap={props.drag_snap}
         minZoom={props.min_zoom}
         maxZoom={props.max_zoom}
+        lineHeight={props.line_height}
+        itemHeightRatio={props.item_height_ratio}
         useResizeHandle={props.use_resize_handle ? false : true}
         onItemMove={onItemMove}
         onItemSelect={onItemSelect}
