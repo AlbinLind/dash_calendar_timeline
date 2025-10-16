@@ -38,6 +38,13 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "start_time": datetime.datetime(2025, 1, 2, 3, 57).timestamp() * 1000,
             "end_time": datetime.datetime(2025, 1, 2, 11, 42).timestamp() * 1000,
             "group": 0,
+            "inputs": {
+                "SKU": {
+                    "type": "number",
+                    "id": "number-1",
+                    "placeholder": "Enter SKU number",
+                }
+            },
         },
     ],
     groups=[

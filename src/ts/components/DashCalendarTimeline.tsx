@@ -126,6 +126,10 @@ const DashCalendarTimeline = (props: Props) => {
     e: React.MouseEvent,
     time: number,
   ) => {
+    // Only respond to left clicks
+    if (e.button !== 0) {
+      return;
+    }
     const item = items.find((item) => item.id === itemId);
     setProps({ clickedItem: { item } });
     setSelectedItem({
@@ -149,7 +153,6 @@ const DashCalendarTimeline = (props: Props) => {
         minZoom={props.min_zoom}
         maxZoom={props.max_zoom}
         onItemMove={onItemMove}
-        onItemSelect={onItemSelect}
         onItemClick={onItemSelect}
         onItemDeselect={onItemDeselect}
       />
@@ -171,7 +174,6 @@ function SelectedItemInfo({
   setProps: setPropsType;
   selectedItemProps?: Record<string, any>;
 }) {
-  console.log("Rendering SelectedItemInfo with item:", item);
   if (item == null) {
     return <></>;
   }
