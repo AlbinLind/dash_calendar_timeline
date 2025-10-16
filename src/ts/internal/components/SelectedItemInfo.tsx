@@ -2,11 +2,7 @@ import React, { useState } from "react";
 
 import { SelectedItemInfoProps } from "types/types";
 
-export function SelectedItemInfo({
-  item,
-  setProps,
-  selectedItemProps,
-}: SelectedItemInfoProps) {
+export function SelectedItemInfo({ item, setProps, selectedItemProps }: SelectedItemInfoProps) {
   if (item == null) {
     return <></>;
   }
@@ -30,9 +26,7 @@ export function SelectedItemInfo({
       <br />
       Group: {item.group}
       <br />
-      {item.hoverInfo && (
-        <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>
-      )}
+      {item.hoverInfo && <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>}
       {/*Dynamically add inputs and update props*/}
       {item.inputs &&
         Object.entries(item.inputs).map(([key, input], index) => {
@@ -45,10 +39,7 @@ export function SelectedItemInfo({
                   if (input.onChange) {
                     input.onChange(e);
                   }
-                  const value =
-                    e.target.type === "checkbox"
-                      ? e.target.checked
-                      : e.target.value;
+                  const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
                   setProps({
                     selectedItemInput: {
                       ...selectedItemProps,

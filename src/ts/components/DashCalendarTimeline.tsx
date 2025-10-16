@@ -18,30 +18,19 @@ const DashCalendarTimeline = (props: Props) => {
   const { id, setProps } = props;
 
   const [items, setItems] = useState(transformItems(props.items));
-  const [selectedItem, setSelectedItem] = useState<
-    SelectedCalendarItemProps | undefined
-  >(undefined);
+  const [selectedItem, setSelectedItem] = useState<SelectedCalendarItemProps | undefined>(undefined);
 
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
-  const minStartTime = Math.max(
-    Math.min(...items.map((item) => item.start_time)),
-    1,
-  );
+  const minStartTime = Math.max(Math.min(...items.map((item) => item.start_time)), 1);
   const maxEndTime = Math.max(
     ...items.map((item) => item.end_time),
     1000 * 60 * 60 * 24, // 1 day
   );
   // Add 12 hours of padding on each side
-  const defaultTimeStart =
-    props.default_time_start || minStartTime - 1000 * 60 * 60 * 12;
-  const defaultTimeEnd =
-    props.default_time_end || maxEndTime + 1000 * 60 * 60 * 12;
+  const defaultTimeStart = props.default_time_start || minStartTime - 1000 * 60 * 60 * 12;
+  const defaultTimeEnd = props.default_time_end || maxEndTime + 1000 * 60 * 60 * 12;
 
-  const onItemMove = (
-    itemId: string | number,
-    dragTime: number,
-    newGroupOrder: number,
-  ) => {
+  const onItemMove = (itemId: string | number, dragTime: number, newGroupOrder: number) => {
     const group = props.groups[newGroupOrder];
     setItems((items) =>
       items.map((item) =>
@@ -57,11 +46,7 @@ const DashCalendarTimeline = (props: Props) => {
     setProps({ items: items });
   };
 
-  const onItemSelect = (
-    itemId: string | number,
-    e: React.MouseEvent,
-    time: number,
-  ) => {
+  const onItemSelect = (itemId: string | number, e: React.MouseEvent, time: number) => {
     // Only respond to left clicks
     if (e.button !== 0) {
       return;
@@ -78,11 +63,7 @@ const DashCalendarTimeline = (props: Props) => {
     setProps({ clickedItem: undefined });
   };
 
-  const onItemResize = (
-    itemId: string | number,
-    time: number,
-    edge: "left" | "right",
-  ) => {
+  const onItemResize = (itemId: string | number, time: number, edge: "left" | "right") => {
     setItems((items) =>
       items.map((item) =>
         item.id === itemId
@@ -111,11 +92,7 @@ const DashCalendarTimeline = (props: Props) => {
         onItemDeselect={onItemDeselect}
         onItemResize={onItemResize}
       />
-      <SelectedItemInfo
-        item={selectedItem}
-        setProps={setProps}
-        selectedItemProps={props.selectedItemInput}
-      />
+      <SelectedItemInfo item={selectedItem} setProps={setProps} selectedItemProps={props.selectedItemInput} />
     </div>
   );
 };
