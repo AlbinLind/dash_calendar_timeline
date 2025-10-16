@@ -14,6 +14,7 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "start_time": datetime.datetime(2025, 1, 1, 10, 30).timestamp() * 1000,
             "end_time": datetime.datetime(2025, 1, 2, 2, 28).timestamp() * 1000,
             "group": 0,
+            "hoverInfo": "<b>Bold hover info</b><br>This is some hover info",
         },
         {
             "id": 2,
@@ -32,7 +33,8 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
         },
     ],
     groups=[
-        {"id": 0, "title": "Group 1", "rightTitle": "Right Title", "stackItems": True}
+        {"id": 0, "title": "Group 1", "rightTitle": "Right Title", "stackItems": True},
+        {"id": 1, "title": "Group 2", "rightTitle": "Right Title", "stackItems": True},
     ],
 )
 
@@ -44,6 +46,16 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
 )
 def display_output(items):
     pp(items)
+    return dash.no_update
+
+
+@app.callback(
+    dash.Output("component", "clickedItem"),
+    dash.Input("component", "clickedItem"),
+    prevent_initial_call=True,
+)
+def display_clicked_item(item):
+    pp(item)
     return dash.no_update
 
 

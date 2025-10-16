@@ -1,0 +1,6 @@
+.selected-item-info {
+  border: 1px solid black;
+  background-color: white;
+  padding: 5px;
+  z-index: 1000;
+}

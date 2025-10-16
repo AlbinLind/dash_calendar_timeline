@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { DashComponentProps } from "../props";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/dist/style.css";
+import "../styles/selected-item.css";
 
 type ItemPropsType = {
   className?: string;
@@ -30,7 +31,13 @@ type CalendarItem = {
   /** Can the item be moved to a different group? */
   canChangeGroup?: boolean;
   itemProps?: ItemPropsType;
+  /** Hover information for the item, can be html to show. */
+  hoverInfo?: string;
 };
+
+type SelectedCalendarItemProps = {
+  mousePosition: { x: number; y: number };
+} & CalendarItem;
 
 type Group = {
   id: string | number;
@@ -51,6 +58,8 @@ type Props = {
   drag_snap?: number;
   min_zoom?: number;
   max_zoom?: number;
+  /** The item that was clicked, if any. */
+  clickedItem?: CalendarItem;
 } & DashComponentProps;
 
 function transformItems(items: CalendarItem[]): CalendarItem[] {
@@ -66,6 +75,9 @@ const DashCalendarTimeline = (props: Props) => {
   const { id, setProps } = props;
 
   const [items, setItems] = useState(transformItems(props.items));
+  const [selectedItem, setSelectedItem] = useState<
+    SelectedCalendarItemProps | undefined
+  >(undefined);
 
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
   const minStartTime = Math.max(
@@ -102,6 +114,23 @@ const DashCalendarTimeline = (props: Props) => {
     setProps({ items: items });
   };
 
+  const onItemSelect = (
+    itemId: string | number,
+    e: React.MouseEvent,
+    time: number,
+  ) => {
+    const item = items.find((item) => item.id === itemId);
+    setProps({ clickedItem: { item } });
+    setSelectedItem({
+      ...item,
+      mousePosition: { x: e.clientX, y: e.clientY },
+    } as SelectedCalendarItemProps);
+  };
+  const onItemDeselect = () => {
+    setSelectedItem(undefined);
+    setProps({ clickedItem: undefined });
+  };
+
   return (
     <div id={id}>
       <Timeline
@@ -113,9 +142,45 @@ const DashCalendarTimeline = (props: Props) => {
         minZoom={props.min_zoom}
         maxZoom={props.max_zoom}
         onItemMove={onItemMove}
+        onItemSelect={onItemSelect}
+        onItemClick={onItemSelect}
+        onItemDeselect={onItemDeselect}
       />
+      <SelectedItemInfo item={selectedItem} />
     </div>
   );
 };
+
+function SelectedItemInfo({ item }: { item?: SelectedCalendarItemProps }) {
+  console.log("Rendering SelectedItemInfo with item:", item);
+  if (item == null) {
+    return <></>;
+  }
+  let x = item.mousePosition.x;
+  let y = item.mousePosition.y;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+      }}
+      className="selected-item-info"
+    >
+      <b>{item.title}</b>
+      <br />
+      Start: {new Date(item.start_time).toLocaleString()}
+      <br />
+      End: {new Date(item.end_time).toLocaleString()}
+      <br />
+      Group: {item.group}
+      <br />
+      {item.hoverInfo && (
+        <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>
+      )}
+    </div>
+  );
+}
 
 export default DashCalendarTimeline;
