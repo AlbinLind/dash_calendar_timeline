@@ -1,0 +1,65 @@
+import React, { useState } from "react";
+
+import { SelectedItemInfoProps } from "types/types";
+
+export function SelectedItemInfo({
+  item,
+  setProps,
+  selectedItemProps,
+}: SelectedItemInfoProps) {
+  if (item == null) {
+    return <></>;
+  }
+  let x = item.mousePosition.x;
+  let y = item.mousePosition.y;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: x,
+        top: y,
+      }}
+      className="selected-item-info"
+    >
+      <b>{item.title}</b>
+      <br />
+      Start: {new Date(item.start_time).toLocaleString()}
+      <br />
+      End: {new Date(item.end_time).toLocaleString()}
+      <br />
+      Group: {item.group}
+      <br />
+      {item.hoverInfo && (
+        <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>
+      )}
+      {/*Dynamically add inputs and update props*/}
+      {item.inputs &&
+        Object.entries(item.inputs).map(([key, input], index) => {
+          return (
+            <div key={index}>
+              <label htmlFor={input.id}>{key}</label>
+              <input
+                {...input}
+                onChange={(e) => {
+                  if (input.onChange) {
+                    input.onChange(e);
+                  }
+                  const value =
+                    e.target.type === "checkbox"
+                      ? e.target.checked
+                      : e.target.value;
+                  setProps({
+                    selectedItemInput: {
+                      ...selectedItemProps,
+                      [key]: value,
+                    },
+                  });
+                }}
+              />
+            </div>
+          );
+        })}
+    </div>
+  );
+}
