@@ -1,0 +1,2 @@
+recursive-include dash_calendar_timeline/** *.js *.css *.json *.html
+prune tests
