@@ -78,6 +78,24 @@ const DashCalendarTimeline = (props: Props) => {
     setProps({ clickedItem: undefined });
   };
 
+  const onItemResize = (
+    itemId: string | number,
+    time: number,
+    edge: "left" | "right",
+  ) => {
+    setItems((items) =>
+      items.map((item) =>
+        item.id === itemId
+          ? Object.assign({}, item, {
+              start_time: edge === "left" ? time : item.start_time,
+              end_time: edge === "right" ? time : item.end_time,
+            })
+          : item,
+      ),
+    );
+    setProps({ items: items });
+  };
+
   return (
     <div id={id}>
       <Timeline
@@ -91,6 +109,7 @@ const DashCalendarTimeline = (props: Props) => {
         onItemMove={onItemMove}
         onItemClick={onItemSelect}
         onItemDeselect={onItemDeselect}
+        onItemResize={onItemResize}
       />
       <SelectedItemInfo
         item={selectedItem}
