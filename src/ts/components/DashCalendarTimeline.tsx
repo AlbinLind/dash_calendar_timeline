@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
@@ -24,6 +24,10 @@ const DashCalendarTimeline = (props: Props) => {
     undefined,
   );
 
+  useEffect(() => {
+    setItems(transformItems(props.items));
+  }, [props.items]);
+
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
   const minStartTime = Math.max(Math.min(...items.map((item) => item.start_time)), 1);
   const maxEndTime = Math.max(
@@ -36,18 +40,17 @@ const DashCalendarTimeline = (props: Props) => {
 
   const onItemMove = (itemId: string | number, dragTime: number, newGroupOrder: number) => {
     const group = props.groups[newGroupOrder];
-    setItems((items) =>
-      items.map((item) =>
-        item.id === itemId
-          ? Object.assign({}, item, {
-              start_time: dragTime,
-              end_time: dragTime + (item.end_time - item.start_time),
-              group: group.id,
-            })
-          : item,
-      ),
+    const newItems = items.map((item) =>
+      item.id === itemId
+        ? Object.assign({}, item, {
+            start_time: dragTime,
+            end_time: dragTime + (item.end_time - item.start_time),
+            group: group.id,
+          })
+        : item,
     );
-    setProps({ items: items });
+    setItems(newItems);
+    setProps({ items: newItems });
   };
 
   const onItemSelect = (itemId: string | number, e: React.MouseEvent) => {
