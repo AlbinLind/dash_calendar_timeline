@@ -89,17 +89,16 @@ const DashCalendarTimeline = (props: Props) => {
   };
 
   const onItemResize = (itemId: string | number, time: number, edge: "left" | "right") => {
-    setItems((items) =>
-      items.map((item) =>
-        item.id === itemId
-          ? Object.assign({}, item, {
-              start_time: edge === "left" ? time : item.start_time,
-              end_time: edge === "right" ? time : item.end_time,
-            })
-          : item,
-      ),
+    const newItems = items.map((item) =>
+      item.id === itemId
+        ? Object.assign({}, item, {
+            start_time: edge === "left" ? time : item.start_time,
+            end_time: edge === "right" ? time : item.end_time,
+          })
+        : item,
     );
-    setProps({ items: items });
+    setItems(newItems);
+    setProps({ items: newItems });
   };
 
   return (

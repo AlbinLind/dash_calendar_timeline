@@ -94,7 +94,7 @@ def update_on_click(item):
                     "type": "number",
                     "placeholder": "Enter SKU",
                 }
-            }
+            },
         },
     ]
 
