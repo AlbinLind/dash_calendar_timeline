@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { SelectedItemInfoProps } from "types/types";
 
-export function SelectedItemInfo({ item, setProps, selectedItemProps }: SelectedItemInfoProps) {
+export function SelectedItemInfo({ item, setProps, selectedItemProps, onDelete }: SelectedItemInfoProps) {
   if (item == null) {
     return <></>;
   }
@@ -19,12 +19,13 @@ export function SelectedItemInfo({ item, setProps, selectedItemProps }: Selected
       className="selected-item-info"
     >
       <b>{item.title}</b>
+      <button type="button" onClick={() => onDelete(item.id)}>🗑</button>
       <br />
       Start: {new Date(item.start_time).toLocaleString()}
       <br />
       End: {new Date(item.end_time).toLocaleString()}
       <br />
-      Group: {item.group}
+      Line: {item.group}
       <br />
       {item.hoverInfo && <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>}
       {/*Dynamically add inputs and update props*/}

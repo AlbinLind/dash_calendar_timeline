@@ -124,6 +124,12 @@ const DashCalendarTimeline = (props: Props) => {
         item={selectedItem}
         setProps={setProps}
         selectedItemProps={props.selectedItemInput}
+        onDelete={(itemId) => {
+          const newItems = items.filter((item) => item.id !== itemId);
+          setItems(newItems);
+          setProps({ items: newItems, clickedItem: undefined, selectedItemInput: undefined });
+          setSelectedItem(undefined);
+        }}
       />
     </div>
   );

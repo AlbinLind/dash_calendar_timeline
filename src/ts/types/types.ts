@@ -79,4 +79,5 @@ export type SelectedItemInfoProps = {
   item?: SelectedCalendarItemProps;
   setProps: setPropsType;
   selectedItemProps?: Record<string, any>;
+  onDelete: (itemId: string | number) => void;
 };
