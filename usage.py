@@ -46,7 +46,7 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
 
 
 @app.callback(
-    dash.Output("component", "items"),
+    dash.Output("component", "items", allow_duplicate=True),
     dash.Input("component", "items"),
     prevent_initial_call=True,
 )
@@ -65,7 +65,11 @@ def display_selected_item_input(selected_item_input):
     return dash.no_update
 
 
-@app.callback(dash.Output("component", "items"), dash.Input("component", "clickedItem"))
+@app.callback(
+    dash.Output("component", "items", allow_duplicate=True),
+    dash.Input("component", "clickedItem"),
+    prevent_initial_call=True,
+)
 def update_on_click(item):
     if item is None:
         return dash.no_update
