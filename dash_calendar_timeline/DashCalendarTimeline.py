@@ -71,6 +71,12 @@ class DashCalendarTimeline(Component):
         - hoverInfo (string; optional):
             Hover information for the item, can be html to show.
 
+        - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
+            If you want some input fields to be shown for the item, you
+            can specify them here.  When the input field changes it will
+            update the `selectedItemInput` prop with the new values. Which
+            can be used in a callback to update the item data.
+
     - default_time_end (number; optional):
         Default end time for the timeline.
 
@@ -139,6 +145,12 @@ class DashCalendarTimeline(Component):
         - hoverInfo (string; optional):
             Hover information for the item, can be html to show.
 
+        - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
+            If you want some input fields to be shown for the item, you
+            can specify them here.  When the input field changes it will
+            update the `selectedItemInput` prop with the new values. Which
+            can be used in a callback to update the item data.
+
     - line_height (number; optional)
 
     - max_zoom (number; optional)
@@ -179,6 +191,12 @@ class DashCalendarTimeline(Component):
             "canChangeGroup": NotRequired[bool],
             "itemProps": NotRequired["ItemsItemProps"],
             "hoverInfo": NotRequired[str],
+            "inputs": NotRequired[
+                typing.Dict[
+                    typing.Union[str, float, int],
+                    typing.Dict[typing.Union[str, float, int], typing.Any],
+                ]
+            ],
         },
     )
 
@@ -218,6 +236,12 @@ class DashCalendarTimeline(Component):
             "canChangeGroup": NotRequired[bool],
             "itemProps": NotRequired["ClickedItemItemProps"],
             "hoverInfo": NotRequired[str],
+            "inputs": NotRequired[
+                typing.Dict[
+                    typing.Union[str, float, int],
+                    typing.Dict[typing.Union[str, float, int], typing.Any],
+                ]
+            ],
         },
     )
 

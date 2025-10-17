@@ -24,6 +24,12 @@ export type CalendarItem = {
   itemProps?: ItemPropsType;
   /** Hover information for the item, can be html to show. */
   hoverInfo?: string;
+  /** If you want some input fields to be shown for the item, you can specify them here.
+   *
+   * When the input field changes it will update the `selectedItemInput` prop with the new values.
+   * Which can be used in a callback to update the item data.
+   */
+  inputs?: { [key: string]: Record<string, any> };
 };
 
 export type Group = {
@@ -67,7 +73,6 @@ export type ItemPropsType = {
 
 export type SelectedCalendarItemProps = {
   mousePosition: { x: number; y: number };
-  inputs?: { [key: string]: React.InputHTMLAttributes<HTMLInputElement> };
 } & CalendarItem;
 
 export type SelectedItemInfoProps = {
