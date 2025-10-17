@@ -89,6 +89,12 @@ def update_on_click(item):
             "start_time": datetime.datetime(2025, 1, 2, 10, 57).timestamp() * 1000,
             "end_time": datetime.datetime(2025, 1, 2, 19, 42).timestamp() * 1000,
             "group": 0,
+            "inputs": {
+                "SKU": {
+                    "type": "number",
+                    "placeholder": "Enter SKU",
+                }
+            }
         },
     ]
 
