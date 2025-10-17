@@ -15,12 +15,12 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "end_time": datetime.datetime(2025, 1, 2, 2, 28).timestamp() * 1000,
             "group": 0,
             "hoverInfo": "<b>Bold hover info</b><br>This is some hover info",
-            "itemProps": {
-                "style": {
-                    "backgroundColor": "green",
-                    "color": "white",
-                }
-            },
+            # "itemProps": {
+            #     "style": {
+            #         "backgroundColor": "green",
+            #         "color": "white",
+            #     }
+            # },
         },
         {
             "id": 2,
@@ -56,16 +56,6 @@ def display_output(items):
 
 
 @app.callback(
-    dash.Output("component", "clickedItem"),
-    dash.Input("component", "clickedItem"),
-    prevent_initial_call=True,
-)
-def display_clicked_item(item):
-    pp(item)
-    return dash.no_update
-
-
-@app.callback(
     dash.Output("component", "selectedItemInput"),
     dash.Input("component", "selectedItemInput"),
     prevent_initial_call=True,
@@ -73,6 +63,30 @@ def display_clicked_item(item):
 def display_selected_item_input(selected_item_input):
     pp(selected_item_input)
     return dash.no_update
+
+
+@app.callback(dash.Output("component", "items"), dash.Input("component", "clickedItem"))
+def update_on_click(item):
+    if item is None:
+        return dash.no_update
+    print("Clicked item:", item)
+    return [
+        {
+            "id": 4,
+            "title": "Test 1",
+            "start_time": datetime.datetime(2025, 1, 2, 4, 28).timestamp() * 1000,
+            "end_time": datetime.datetime(2025, 1, 2, 7, 57).timestamp() * 1000,
+            "group": 0,
+            "canMove": False,
+        },
+        {
+            "id": 5,
+            "title": "Test 2",
+            "start_time": datetime.datetime(2025, 1, 2, 10, 57).timestamp() * 1000,
+            "end_time": datetime.datetime(2025, 1, 2, 19, 42).timestamp() * 1000,
+            "group": 0,
+        },
+    ]
 
 
 if __name__ == "__main__":
