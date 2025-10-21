@@ -15,12 +15,12 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
             "end_time": datetime.datetime(2025, 1, 2, 2, 28).timestamp() * 1000,
             "group": 0,
             "hoverInfo": "<b>Bold hover info</b><br>This is some hover info",
-            # "itemProps": {
-            #     "style": {
-            #         "backgroundColor": "green",
-            #         "color": "white",
-            #     }
-            # },
+            "itemProps": {
+                "style": {
+                    "background": "green",
+                    "color": "white",
+                }
+            },
         },
         {
             "id": 2,
