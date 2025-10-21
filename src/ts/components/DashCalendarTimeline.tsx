@@ -163,6 +163,9 @@ const DashCalendarTimeline = (props: Props) => {
   };
 
   const onCanvasContextMenu = (groupId: string | number, time: number, e: React.MouseEvent) => {
+    if (!props.context_menu_options) {
+      return;
+    }
     e.preventDefault();
     setShowContextMenu({
       contextItems: props.context_menu_options || [],
