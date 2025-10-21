@@ -4,7 +4,8 @@ import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
 import "../styles/base.css";
 import { SelectedItemInfo } from "../internal/components/SelectedItemInfo";
-import { CalendarItem, Props, SelectedCalendarItemProps } from "types/types";
+import { CalendarItem, Props, rightClickProps, SelectedCalendarItemProps } from "types/types";
+import { RightClickOutsideHandler } from "../internal/components/RightClickOutsideHandler";
 
 function transformItems(items: CalendarItem[]): CalendarItem[] {
   return items.map((item) => ({
@@ -24,6 +25,7 @@ const DashCalendarTimeline = (props: Props) => {
     undefined,
   );
   const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
+  const [showContextMenu, setShowContextMenu] = useState<rightClickProps | undefined>(undefined);
 
   useEffect(() => {
     setItems(transformItems(props.items));
@@ -160,6 +162,26 @@ const DashCalendarTimeline = (props: Props) => {
     );
   };
 
+  const onCanvasContextMenu = (groupId: string | number, time: number, e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowContextMenu({
+      contextItems: props.context_menu_options || [],
+      mouseEvent: e,
+      time: time,
+      groupId: groupId,
+      onClickEvent: (option: string) => {
+        setShowContextMenu(undefined);
+        setProps({
+          rightClickedEvent: {
+            time: time,
+            group_id: groupId,
+            option: option,
+          },
+        });
+      },
+    });
+  };
+
   return (
     <div id={id}>
       <Timeline
@@ -183,7 +205,12 @@ const DashCalendarTimeline = (props: Props) => {
           setShownItemInfo(undefined);
         }}
         itemRenderer={itemRenderer}
+        onCanvasContextMenu={onCanvasContextMenu}
+        onCanvasClick={() => {
+          setShowContextMenu(undefined);
+        }}
       />
+      {showContextMenu && <RightClickOutsideHandler {...showContextMenu} />}
       <SelectedItemInfo
         item={shownItemInfo}
         setProps={setProps}

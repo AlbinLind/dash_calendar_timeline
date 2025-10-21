@@ -1,4 +1,5 @@
 import { DashComponentProps, setPropsType } from "props";
+import React from "react";
 
 export type CalendarItem = {
   id: string | number;
@@ -40,6 +41,17 @@ export type Group = {
   height?: number;
 };
 
+export type RightClickEvent = {
+  /**
+   * The time (in milliseconds since epoch) where the right click happened.
+   */
+  time: number;
+  /** The group id where the right click happened */
+  group_id: string | number;
+  /** The option that was clicked, defined in the context menu */
+  option: string;
+};
+
 export type Props = {
   items: CalendarItem[];
   groups: Group[];
@@ -53,6 +65,8 @@ export type Props = {
   max_zoom?: number;
   line_height?: number;
   item_height_ratio?: number;
+  /** Options to show in the right click context menu */
+  context_menu_options?: string[];
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;
@@ -60,6 +74,7 @@ export type Props = {
   /** The item that was clicked, if any. */
   clickedItem?: CalendarItem;
   selectedItemInput?: Record<string, any>;
+  rightClickedEvent?: RightClickEvent;
 } & DashComponentProps;
 
 export type ItemPropsType = {
@@ -80,4 +95,11 @@ export type SelectedItemInfoProps = {
   setProps: setPropsType;
   selectedItemProps?: Record<string, any>;
   onDelete: (itemId: string | number) => void;
+};
+export type rightClickProps = {
+  contextItems: string[];
+  mouseEvent: React.MouseEvent;
+  time: number;
+  groupId: string | number;
+  onClickEvent: (option: string) => void;
 };

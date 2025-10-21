@@ -42,6 +42,7 @@ app.layout = dash_calendar_timeline.DashCalendarTimeline(
         {"id": 0, "title": "Group 1", "rightTitle": "Right Title", "stackItems": True},
         {"id": 1, "title": "Group 2", "rightTitle": "Right Title", "stackItems": True},
     ],
+    context_menu_options=["Option 1", "Option 2", "Option 3"],
 )
 
 
@@ -62,6 +63,17 @@ def display_output(items):
 )
 def display_selected_item_input(selected_item_input):
     pp(selected_item_input)
+    return dash.no_update
+
+
+@app.callback(
+    dash.Output("component", "items", allow_duplicate=True),
+    dash.Input("component", "rightClickedEvent"),
+    prevent_initial_call=True,
+)
+def update_on_right_click(event):
+    print("Right clicked event:")
+    pp(event)
     return dash.no_update
 
 
