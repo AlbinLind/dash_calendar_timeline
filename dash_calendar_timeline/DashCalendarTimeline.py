@@ -77,6 +77,9 @@ class DashCalendarTimeline(Component):
             update the `selectedItemInput` prop with the new values. Which
             can be used in a callback to update the item data.
 
+    - context_menu_options (list of strings; optional):
+        Options to show in the right click context menu.
+
     - default_time_end (number; optional):
         Default end time for the timeline.
 
@@ -156,6 +159,20 @@ class DashCalendarTimeline(Component):
     - max_zoom (number; optional)
 
     - min_zoom (number; optional)
+
+    - rightClickedEvent (dict; optional)
+
+        `rightClickedEvent` is a dict with keys:
+
+        - time (number; required):
+            The time (in milliseconds since epoch) where the right click
+            happened.
+
+        - group_id (string | number; required):
+            The group id where the right click happened.
+
+        - option (string; required):
+            The option that was clicked, defined in the context menu.
 
     - selectedItemInput (dict with strings as keys and values of type boolean | number | string | dict | list; optional)
 
@@ -245,6 +262,11 @@ class DashCalendarTimeline(Component):
         },
     )
 
+    RightClickedEvent = TypedDict(
+        "RightClickedEvent",
+        {"time": NumberType, "group_id": typing.Union[str, NumberType], "option": str},
+    )
+
     def __init__(
         self,
         items: typing.Optional[typing.Sequence["Items"]] = None,
@@ -256,17 +278,20 @@ class DashCalendarTimeline(Component):
         max_zoom: typing.Optional[NumberType] = None,
         line_height: typing.Optional[NumberType] = None,
         item_height_ratio: typing.Optional[NumberType] = None,
+        context_menu_options: typing.Optional[typing.Sequence[str]] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
             typing.Dict[typing.Union[str, float, int], typing.Any]
         ] = None,
+        rightClickedEvent: typing.Optional["RightClickedEvent"] = None,
         id: typing.Optional[typing.Union[str, dict]] = None,
         **kwargs,
     ):
         self._prop_names = [
             "id",
             "clickedItem",
+            "context_menu_options",
             "default_time_end",
             "default_time_start",
             "drag_snap",
@@ -276,6 +301,7 @@ class DashCalendarTimeline(Component):
             "line_height",
             "max_zoom",
             "min_zoom",
+            "rightClickedEvent",
             "selectedItemInput",
             "use_resize_handle",
         ]
@@ -283,6 +309,7 @@ class DashCalendarTimeline(Component):
         self.available_properties = [
             "id",
             "clickedItem",
+            "context_menu_options",
             "default_time_end",
             "default_time_start",
             "drag_snap",
@@ -292,6 +319,7 @@ class DashCalendarTimeline(Component):
             "line_height",
             "max_zoom",
             "min_zoom",
+            "rightClickedEvent",
             "selectedItemInput",
             "use_resize_handle",
         ]
