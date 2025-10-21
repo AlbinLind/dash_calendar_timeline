@@ -20,9 +20,10 @@ const DashCalendarTimeline = (props: Props) => {
   const { id, setProps } = props;
 
   const [items, setItems] = useState(transformItems(props.items));
-  const [selectedItem, setSelectedItem] = useState<SelectedCalendarItemProps | undefined>(
+  const [shownItemInfo, setShownItemInfo] = useState<SelectedCalendarItemProps | undefined>(
     undefined,
   );
+  const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
 
   useEffect(() => {
     setItems(transformItems(props.items));
@@ -58,11 +59,18 @@ const DashCalendarTimeline = (props: Props) => {
     if (e.button !== 0) {
       return;
     }
-    if (selectedItem && selectedItem.id !== itemId) {
-      setProps({ clickedItem: undefined, selectedItemInput: undefined });
-      setSelectedItem(undefined);
+    if (!hasSelectedItem && shownItemInfo?.id === itemId) {
+      setHasSelectedItem(true);
+      setProps({ clickedItem: shownItemInfo });
       return;
     }
+    const item = items.find((item) => item.id === itemId);
+    setShownItemInfo({
+      ...item,
+      mousePosition: { x: e.clientX, y: e.clientY },
+    } as SelectedCalendarItemProps);
+    setProps({ clickedItem: item });
+    setHasSelectedItem(true);
   };
 
   const onItemClick = (itemId: string | number, e: React.MouseEvent, time: number) => {
@@ -70,22 +78,26 @@ const DashCalendarTimeline = (props: Props) => {
     if (e.button !== 0) {
       return;
     }
-    if (selectedItem && selectedItem.id === itemId) {
+    if (hasSelectedItem) {
+      setShownItemInfo(undefined);
       setProps({ clickedItem: undefined, selectedItemInput: undefined });
-      setSelectedItem(undefined);
-      return;
+      setHasSelectedItem(false);
     }
-    const item = items.find((item) => item.id === itemId);
-    setProps({ clickedItem: { item } });
-    setSelectedItem({
-      ...item,
-      mousePosition: { x: e.clientX, y: e.clientY },
-    } as SelectedCalendarItemProps);
+    if (!hasSelectedItem) {
+      const item = items.find((item) => item.id === itemId);
+      setShownItemInfo({
+        ...item,
+        mousePosition: { x: e.clientX, y: e.clientY },
+      } as SelectedCalendarItemProps);
+      setProps({ clickedItem: item });
+      setHasSelectedItem(true);
+    }
   };
 
   const onItemDeselect = () => {
-    setSelectedItem(undefined);
+    setShownItemInfo(undefined);
     setProps({ clickedItem: undefined, selectedItemInput: undefined });
+    setHasSelectedItem(false);
   };
 
   const onItemResize = (itemId: string | number, time: number, edge: "left" | "right") => {
@@ -99,6 +111,53 @@ const DashCalendarTimeline = (props: Props) => {
     );
     setItems(newItems);
     setProps({ items: newItems });
+  };
+
+  const onMouseEnter = (itemId: string | number, e: React.MouseEvent) => {
+    if (hasSelectedItem) {
+      return;
+    }
+    // Show the selected item info on hover
+    const item = items.find((item) => item.id === itemId);
+    setShownItemInfo({
+      ...item,
+      mousePosition: { x: e.clientX, y: e.clientY },
+    } as SelectedCalendarItemProps);
+  };
+
+  const onMouseLeave = () => {
+    // Hide the selected item info when not hovering
+    if (!hasSelectedItem) {
+      setShownItemInfo(undefined);
+    }
+  };
+
+  const itemRenderer = ({ item, itemContext, getItemProps, getResizeProps }: any) => {
+    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
+    const { key, ref, ...rest } = getItemProps(item.itemProps ?? {});
+    const { useResizeHandle } = itemContext;
+
+    return (
+      <div
+        onMouseEnter={(e) => onMouseEnter(item.id, e)}
+        onMouseLeave={onMouseLeave}
+        {...rest}
+        ref={ref}
+        key={`${key}-outer`}
+      >
+        {useResizeHandle ? <div {...leftResizeProps} key={`${key}-lr`} /> : null}
+
+        <div
+          className="rct-item-content"
+          style={{ maxHeight: `${itemContext.dimensions.height}` }}
+          key={`${key}-content`}
+        >
+          {itemContext.title}
+        </div>
+
+        {useResizeHandle ? <div {...rightResizeProps} key={`${key}-rr`} /> : null}
+      </div>
+    );
   };
 
   return (
@@ -119,16 +178,17 @@ const DashCalendarTimeline = (props: Props) => {
         onItemClick={onItemClick}
         onItemDeselect={onItemDeselect}
         onItemResize={onItemResize}
+        itemRenderer={itemRenderer}
       />
       <SelectedItemInfo
-        item={selectedItem}
+        item={shownItemInfo}
         setProps={setProps}
         selectedItemProps={props.selectedItemInput}
         onDelete={(itemId) => {
           const newItems = items.filter((item) => item.id !== itemId);
           setItems(newItems);
           setProps({ items: newItems, clickedItem: undefined, selectedItemInput: undefined });
-          setSelectedItem(undefined);
+          setShownItemInfo(undefined);
         }}
       />
     </div>
