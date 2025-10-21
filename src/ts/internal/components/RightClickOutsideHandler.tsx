@@ -18,9 +18,14 @@ export function RightClickOutsideHandler({
         border: "1px solid black",
         zIndex: 1000,
       }}
+      className="dash-rct-right-click-menu"
     >
       {contextItems.map((item, index) => (
-        <div key={index} onClick={() => onClickEvent(item)}>
+        <div
+          key={index}
+          onClick={() => onClickEvent(item)}
+          className="dash-rct-right-click-menu-option"
+        >
           {item}
         </div>
       ))}
