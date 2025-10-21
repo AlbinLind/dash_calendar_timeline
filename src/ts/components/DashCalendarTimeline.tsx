@@ -82,8 +82,7 @@ const DashCalendarTimeline = (props: Props) => {
       setShownItemInfo(undefined);
       setProps({ clickedItem: undefined, selectedItemInput: undefined });
       setHasSelectedItem(false);
-    }
-    if (!hasSelectedItem) {
+    } else {
       const item = items.find((item) => item.id === itemId);
       setShownItemInfo({
         ...item,
@@ -132,6 +131,7 @@ const DashCalendarTimeline = (props: Props) => {
     }
   };
 
+  // Slightly modfied default item renderer from react-calendar-timeline to add mouse events
   const itemRenderer = ({ item, itemContext, getItemProps, getResizeProps }: any) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
     const { key, ref, ...rest } = getItemProps(item.itemProps ?? {});
@@ -178,6 +178,10 @@ const DashCalendarTimeline = (props: Props) => {
         onItemClick={onItemClick}
         onItemDeselect={onItemDeselect}
         onItemResize={onItemResize}
+        onItemDrag={() => {
+          setHasSelectedItem(false);
+          setShownItemInfo(undefined);
+        }}
         itemRenderer={itemRenderer}
       />
       <SelectedItemInfo
