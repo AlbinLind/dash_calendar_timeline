@@ -246,6 +246,10 @@ const DashCalendarTimeline = (props: Props) => {
       const offsetY = event.clientY - rect.top;
 
       const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
+      console.log("Calculated group index:", groupIdx);
+      const group_id = props.groups[groupIdx].id;
+      console.log("Groups", props.groups);
+      console.log("Calculated group id:", group_id);
       const start = visibleTimeStart ?? defaultTimeStart;
       const end = visibleTimeEnd ?? defaultTimeEnd;
       console.log("Calculating drop time with:", {
@@ -262,7 +266,7 @@ const DashCalendarTimeline = (props: Props) => {
       setProps({
         externalDrop: {
           data: payload,
-          group_id: props.groups[groupIdx]?.id,
+          group_id: props.groups[groupIdx].id,
           time: dropTime,
         },
       });
