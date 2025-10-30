@@ -15,11 +15,13 @@ pk.DashCalendarTimeline.propTypes = {items:pt.arrayOf(pt.shape({id:pt.oneOfType(
  context_menu_options:pt.arrayOf(pt.string),
  visible_time_start:pt.number,
  visible_time_end:pt.number,
+ enable_external_drop:pt.bool,
  use_resize_handle:pt.bool,
  clickedItem:pt.shape({id:pt.oneOfType([pt.string,pt.number]),group:pt.oneOfType([pt.string,pt.number]),title:pt.string,start_time:pt.number,end_time:pt.number,canMove:pt.bool,canResize:pt.oneOfType([pt.oneOf(["left"]),pt.oneOf(["right"]),pt.oneOf(["both"])]),canChangeGroup:pt.bool,itemProps:pt.shape({className:pt.string,style:pt.objectOf(pt.any)}),hoverInfo:pt.string,sku:pt.number,is_fixed:pt.bool,inputs:pt.objectOf(pt.objectOf(pt.any))}),
  selectedItemInput:pt.objectOf(pt.any),
  rightClickedEvent:pt.shape({time:pt.number,group_id:pt.oneOfType([pt.string,pt.number]),option:pt.string}),
  skuChanged:pt.number,
  isFixedChanged:pt.bool,
+ externalDrop:pt.shape({data:pt.any,time:pt.number,groupId:pt.oneOfType([pt.string,pt.number])}),
  id:pt.string,
  setProps:pt.any};

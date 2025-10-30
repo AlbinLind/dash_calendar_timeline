@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Timeline from "react-calendar-timeline";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
@@ -30,6 +30,7 @@ const DashCalendarTimeline = (props: Props) => {
   );
   const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
   const [showContextMenu, setShowContextMenu] = useState<rightClickProps | undefined>(undefined);
+  const timelineRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setItems(transformItems(props.items));
@@ -215,8 +216,76 @@ const DashCalendarTimeline = (props: Props) => {
     updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
   };
 
+  useEffect(() => {
+    if (!props.enable_external_drop) {
+      return;
+    }
+
+    const canvas = timelineRef.current?.querySelector<HTMLDivElement>(".rct-scroll");
+    if (!canvas || !setProps) {
+      return;
+    }
+
+    const handleDragOver = (event: DragEvent) => {
+      event.preventDefault();
+      event.dataTransfer && (event.dataTransfer.dropEffect = "copy");
+    };
+
+    const handleDrop = (event: DragEvent) => {
+      event.preventDefault();
+      const raw = event.dataTransfer?.getData("application/json");
+      if (!raw || props.groups.length === 0) {
+        return;
+      }
+
+      const payload = JSON.parse(raw);
+      const rect = canvas.getBoundingClientRect();
+      const lineHeight = props.line_height ?? 60;
+
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
+
+      const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
+      const start = visibleTimeStart ?? defaultTimeStart;
+      const end = visibleTimeEnd ?? defaultTimeEnd;
+      console.log("Calculating drop time with:", {
+        offsetX,
+        rect,
+        canvas,
+        visibleTimeStart,
+        visibleTimeEnd,
+        start,
+        end,
+      }); // Debug log
+      const dropTime = start + (offsetX / rect.width) * (end - start);
+
+      setProps({
+        externalDrop: {
+          data: payload,
+          group_id: props.groups[groupIdx]?.id,
+          time: dropTime,
+        },
+      });
+    };
+
+    canvas.addEventListener("dragover", handleDragOver);
+    canvas.addEventListener("drop", handleDrop);
+    return () => {
+      canvas.removeEventListener("dragover", handleDragOver);
+      canvas.removeEventListener("drop", handleDrop);
+    };
+  }, [
+    props.enable_external_drop,
+    props.groups,
+    visibleTimeStart,
+    visibleTimeEnd,
+    defaultTimeStart,
+    defaultTimeEnd,
+    setProps,
+  ]);
+
   return (
-    <div id={id}>
+    <div id={id} ref={timelineRef}>
       <Timeline
         groups={props.groups}
         items={items}

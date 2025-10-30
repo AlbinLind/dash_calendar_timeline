@@ -73,6 +73,7 @@ export type Props = {
   context_menu_options?: string[];
   visible_time_start?: number;
   visible_time_end?: number;
+  enable_external_drop?: boolean;
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;
@@ -85,6 +86,11 @@ export type Props = {
   skuChanged?: number;
   /** Is fixed value of the item that was changed for the selected item */
   isFixedChanged?: boolean;
+  externalDrop?: {
+    data: any;
+    time: number;
+    groupId: string | number;
+  };
 } & DashComponentProps;
 
 export type ItemPropsType = {

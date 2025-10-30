@@ -95,6 +95,18 @@ class DashCalendarTimeline(Component):
     - drag_snap (number; optional):
         Snap dragged items to a time interval (in milliseconds).
 
+    - enable_external_drop (boolean; optional)
+
+    - externalDrop (dict; optional)
+
+        `externalDrop` is a dict with keys:
+
+        - data (boolean | number | string | dict | list; required)
+
+        - time (number; required)
+
+        - groupId (string | number; required)
+
     - groups (list of dicts; required)
 
         `groups` is a list of dicts with keys:
@@ -293,6 +305,15 @@ class DashCalendarTimeline(Component):
         {"time": NumberType, "group_id": typing.Union[str, NumberType], "option": str},
     )
 
+    ExternalDrop = TypedDict(
+        "ExternalDrop",
+        {
+            "data": typing.Any,
+            "time": NumberType,
+            "groupId": typing.Union[str, NumberType],
+        },
+    )
+
     def __init__(
         self,
         items: typing.Optional[typing.Sequence["Items"]] = None,
@@ -307,6 +328,7 @@ class DashCalendarTimeline(Component):
         context_menu_options: typing.Optional[typing.Sequence[str]] = None,
         visible_time_start: typing.Optional[NumberType] = None,
         visible_time_end: typing.Optional[NumberType] = None,
+        enable_external_drop: typing.Optional[bool] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -315,6 +337,7 @@ class DashCalendarTimeline(Component):
         rightClickedEvent: typing.Optional["RightClickedEvent"] = None,
         skuChanged: typing.Optional[NumberType] = None,
         isFixedChanged: typing.Optional[bool] = None,
+        externalDrop: typing.Optional["ExternalDrop"] = None,
         id: typing.Optional[typing.Union[str, dict]] = None,
         **kwargs,
     ):
@@ -325,6 +348,8 @@ class DashCalendarTimeline(Component):
             "default_time_end",
             "default_time_start",
             "drag_snap",
+            "enable_external_drop",
+            "externalDrop",
             "groups",
             "isFixedChanged",
             "item_height_ratio",
@@ -347,6 +372,8 @@ class DashCalendarTimeline(Component):
             "default_time_end",
             "default_time_start",
             "drag_snap",
+            "enable_external_drop",
+            "externalDrop",
             "groups",
             "isFixedChanged",
             "item_height_ratio",
