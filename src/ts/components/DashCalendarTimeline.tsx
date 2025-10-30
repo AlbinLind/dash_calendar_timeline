@@ -333,9 +333,18 @@ const DashCalendarTimeline = (props: Props) => {
           setShownItemInfo(undefined);
         }}
         onItemFix={(itemId, isFixed) => {
-          const newItems = items.map((item) =>
-            item.id === itemId ? { ...item, is_fixed: isFixed } : item,
-          );
+          const fixedItem = items.find((item) => item.id === itemId);
+          const newItems = items.map((item) => {
+            if (item.group === fixedItem.group) {
+              return item;
+            }
+            if (!isFixed) {
+              return { ...item, is_fixed: false };
+            }
+            if (item.start_time < fixedItem.end_time) {
+              return { ...item, is_fixed: true };
+            }
+          });
           setItems(newItems);
           setProps({ items: newItems });
         }}
