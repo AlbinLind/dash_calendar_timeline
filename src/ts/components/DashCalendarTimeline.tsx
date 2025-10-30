@@ -237,6 +237,7 @@ const DashCalendarTimeline = (props: Props) => {
       if (!raw || props.groups.length === 0) {
         return;
       }
+      console.log(event);
 
       const payload = JSON.parse(raw);
       const rect = canvas.getBoundingClientRect();
@@ -244,6 +245,7 @@ const DashCalendarTimeline = (props: Props) => {
 
       const offsetX = event.clientX - rect.left;
       const offsetY = event.clientY - rect.top;
+      console.log("Calculating group index with offsetY:", offsetY, "and lineHeight:", lineHeight);
 
       const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
       console.log("Calculated group index:", groupIdx);
