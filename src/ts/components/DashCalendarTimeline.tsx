@@ -248,6 +248,15 @@ const DashCalendarTimeline = (props: Props) => {
       const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
       const start = visibleTimeStart ?? defaultTimeStart;
       const end = visibleTimeEnd ?? defaultTimeEnd;
+      console.log("Calculating drop time with:", {
+        offsetX,
+        rect,
+        canvas,
+        visibleTimeStart,
+        visibleTimeEnd,
+        start,
+        end,
+      }); // Debug log
       const dropTime = start + (offsetX / rect.width) * (end - start);
 
       setProps({
