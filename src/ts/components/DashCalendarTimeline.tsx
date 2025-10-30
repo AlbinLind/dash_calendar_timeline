@@ -335,7 +335,7 @@ const DashCalendarTimeline = (props: Props) => {
         onItemFix={(itemId, isFixed) => {
           const fixedItem = items.find((item) => item.id === itemId);
           const newItems = items.map((item) => {
-            if (item.group === fixedItem.group) {
+            if (item.group !== fixedItem.group) {
               return item;
             }
             if (!isFixed) {
