@@ -345,6 +345,7 @@ const DashCalendarTimeline = (props: Props) => {
             if (item.start_time < fixedItem.end_time) {
               return { ...item, is_fixed: true };
             }
+            return item;
           });
           setItems(newItems);
           setProps({ items: newItems });
