@@ -165,6 +165,7 @@ const DashCalendarTimeline = (props: Props) => {
         {...rest}
         ref={ref}
         key={`${key}-outer`}
+        isfixed={item.is_fixed ? "true" : "false"}
       >
         {useResizeHandle ? <div {...leftResizeProps} key={`${key}-lr`} /> : null}
 
