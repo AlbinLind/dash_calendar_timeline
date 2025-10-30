@@ -177,7 +177,11 @@ class DashCalendarTimeline(Component):
     - selectedItemInput (dict with strings as keys and values of type boolean | number | string | dict | list; optional)
 
     - use_resize_handle (boolean; optional):
-        Should you only be able to resize from the ends? Defaults to True."""
+        Should you only be able to resize from the ends? Defaults to True.
+
+    - visible_time_end (number; optional)
+
+    - visible_time_start (number; optional)"""
 
     _children_props = []
     _base_nodes = ["children"]
@@ -279,6 +283,8 @@ class DashCalendarTimeline(Component):
         line_height: typing.Optional[NumberType] = None,
         item_height_ratio: typing.Optional[NumberType] = None,
         context_menu_options: typing.Optional[typing.Sequence[str]] = None,
+        visible_time_start: typing.Optional[NumberType] = None,
+        visible_time_end: typing.Optional[NumberType] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -304,6 +310,8 @@ class DashCalendarTimeline(Component):
             "rightClickedEvent",
             "selectedItemInput",
             "use_resize_handle",
+            "visible_time_end",
+            "visible_time_start",
         ]
         self._valid_wildcard_attributes = []
         self.available_properties = [
@@ -322,6 +330,8 @@ class DashCalendarTimeline(Component):
             "rightClickedEvent",
             "selectedItemInput",
             "use_resize_handle",
+            "visible_time_end",
+            "visible_time_start",
         ]
         self.available_wildcard_properties = []
         _explicit_args = kwargs.pop("_explicit_args")

@@ -67,6 +67,8 @@ export type Props = {
   item_height_ratio?: number;
   /** Options to show in the right click context menu */
   context_menu_options?: string[];
+  visible_time_start?: number;
+  visible_time_end?: number;
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;

@@ -21,6 +21,10 @@ const DashCalendarTimeline = (props: Props) => {
   const { id, setProps } = props;
 
   const [items, setItems] = useState(transformItems(props.items));
+  const [visibleTimeStart, setVisibleTimeStart] = useState<number | undefined>(
+    props.visible_time_start,
+  );
+  const [visibleTimeEnd, setVisibleTimeEnd] = useState<number | undefined>(props.visible_time_end);
   const [shownItemInfo, setShownItemInfo] = useState<SelectedCalendarItemProps | undefined>(
     undefined,
   );
@@ -30,6 +34,21 @@ const DashCalendarTimeline = (props: Props) => {
   useEffect(() => {
     setItems(transformItems(props.items));
   }, [props.items]);
+
+  useEffect(() => {
+    if (props.visible_time_start !== undefined) {
+      setVisibleTimeStart(props.visible_time_start);
+      setProps({
+        visible_time_start: undefined,
+      });
+    }
+    if (props.visible_time_end !== undefined) {
+      setVisibleTimeEnd(props.visible_time_end);
+      setProps({
+        visible_time_end: undefined,
+      });
+    }
+  }, [props.visible_time_start, props.visible_time_end]);
 
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
   const minStartTime = Math.max(Math.min(...items.map((item) => item.start_time)), 1);
@@ -185,6 +204,16 @@ const DashCalendarTimeline = (props: Props) => {
     });
   };
 
+  const onTimeChange = (
+    visibleTimeStart: number,
+    visibleTimeEnd: number,
+    updateScrollCanvas: (start: number, end: number, forceUpdateDimensions?: boolean) => void,
+  ) => {
+    setVisibleTimeStart(visibleTimeStart);
+    setVisibleTimeEnd(visibleTimeEnd);
+    updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
+  };
+
   return (
     <div id={id}>
       <Timeline
@@ -212,6 +241,9 @@ const DashCalendarTimeline = (props: Props) => {
         onCanvasClick={() => {
           setShowContextMenu(undefined);
         }}
+        onTimeChange={onTimeChange}
+        visibleTimeStart={visibleTimeStart}
+        visibleTimeEnd={visibleTimeEnd}
       />
       {showContextMenu && <RightClickOutsideHandler {...showContextMenu} />}
       <SelectedItemInfo
