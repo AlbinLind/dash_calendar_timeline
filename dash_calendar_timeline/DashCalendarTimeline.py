@@ -97,7 +97,7 @@ class DashCalendarTimeline(Component):
 
     - enable_external_drop (boolean; optional)
 
-    - externalDrop (dict; required)
+    - externalDrop (dict; optional)
 
         `externalDrop` is a dict with keys:
 
@@ -394,7 +394,7 @@ class DashCalendarTimeline(Component):
         _locals.update(kwargs)  # For wildcard attrs and excess named props
         args = {k: _locals[k] for k in _explicit_args}
 
-        for k in ["externalDrop", "groups", "items"]:
+        for k in ["groups", "items"]:
             if k not in args:
                 raise TypeError("Required argument `" + k + "` was not specified.")
 

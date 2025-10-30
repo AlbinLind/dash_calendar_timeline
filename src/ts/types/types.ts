@@ -86,7 +86,7 @@ export type Props = {
   skuChanged?: number;
   /** Is fixed value of the item that was changed for the selected item */
   isFixedChanged?: boolean;
-  externalDrop: {
+  externalDrop?: {
     data: any;
     time: number;
     groupId: string | number;
