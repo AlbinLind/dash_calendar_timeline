@@ -242,8 +242,8 @@ const DashCalendarTimeline = (props: Props) => {
       const rect = canvas.getBoundingClientRect();
       const lineHeight = props.line_height ?? 60;
 
-      const offsetX = event.clientX - rect.left + canvas.scrollLeft;
-      const offsetY = event.clientY - rect.top + canvas.scrollTop;
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
 
       const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
       const start = visibleTimeStart ?? defaultTimeStart;
