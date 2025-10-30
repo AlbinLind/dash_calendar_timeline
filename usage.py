@@ -109,6 +109,7 @@ def update_on_click(item):
     if item is None:
         return dash.no_update
     print("Clicked item:", item)
+    return dash.no_update
     return [
         {
             "id": 4,
@@ -117,6 +118,8 @@ def update_on_click(item):
             "end_time": datetime.datetime(2025, 1, 2, 7, 57).timestamp() * 1000,
             "group": 0,
             "canMove": False,
+            "sku": 8,
+            "is_fixed": True,
         },
         {
             "id": 5,
@@ -124,12 +127,8 @@ def update_on_click(item):
             "start_time": datetime.datetime(2025, 1, 2, 10, 57).timestamp() * 1000,
             "end_time": datetime.datetime(2025, 1, 2, 19, 42).timestamp() * 1000,
             "group": 0,
-            "inputs": {
-                "SKU": {
-                    "type": "number",
-                    "placeholder": "Enter SKU",
-                }
-            },
+            "sku": 12,
+            "is_fixed": False,
         },
     ]
 
@@ -152,6 +151,18 @@ def update_on_time_change(n_clicks):
     return datetime.datetime(2024, 12, 31, 0, 0).timestamp() * 1000, datetime.datetime(
         2025, 1, 4, 0, 0
     ).timestamp() * 1000
+
+
+@app.callback(
+    dash.Output("reset-time-button", "n_clicks", allow_duplicate=True),
+    dash.Input("component", "skuChanged"),
+    dash.Input("component", "isFixedChanged"),
+    prevent_initial_call=True,
+)
+def log_item_changes(sku_changed, is_fixed_changed):
+    print("SKU changed to:", sku_changed)
+    print("Is fixed changed to:", is_fixed_changed)
+    return dash.no_update
 
 
 if __name__ == "__main__":

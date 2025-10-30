@@ -256,6 +256,18 @@ const DashCalendarTimeline = (props: Props) => {
           setProps({ items: newItems, clickedItem: undefined, selectedItemInput: undefined });
           setShownItemInfo(undefined);
         }}
+        onItemFix={(itemId, isFixed) => {
+          const newItems = items.map((item) =>
+            item.id === itemId ? { ...item, is_fixed: isFixed } : item,
+          );
+          setItems(newItems);
+          setProps({ items: newItems });
+        }}
+        onSkuChange={(itemId, sku) => {
+          const newItems = items.map((item) => (item.id === itemId ? { ...item, sku: sku } : item));
+          setItems(newItems);
+          setProps({ items: newItems });
+        }}
       />
     </div>
   );

@@ -25,6 +25,10 @@ export type CalendarItem = {
   itemProps?: ItemPropsType;
   /** Hover information for the item, can be html to show. */
   hoverInfo?: string;
+  /** SKU number for the item */
+  sku?: number;
+  /** Is the item fixed in position */
+  is_fixed?: boolean;
   /** If you want some input fields to be shown for the item, you can specify them here.
    *
    * When the input field changes it will update the `selectedItemInput` prop with the new values.
@@ -77,6 +81,10 @@ export type Props = {
   clickedItem?: CalendarItem;
   selectedItemInput?: Record<string, any>;
   rightClickedEvent?: RightClickEvent;
+  /** SKU number of the item that was changed for the selected item */
+  skuChanged?: number;
+  /** Is fixed value of the item that was changed for the selected item */
+  isFixedChanged?: boolean;
 } & DashComponentProps;
 
 export type ItemPropsType = {
@@ -97,6 +105,8 @@ export type SelectedItemInfoProps = {
   setProps: setPropsType;
   selectedItemProps?: Record<string, any>;
   onDelete: (itemId: string | number) => void;
+  onItemFix: (itemId: string | number, isFixed: boolean) => void;
+  onSkuChange: (itemId: string | number, sku: number) => void;
 };
 export type rightClickProps = {
   contextItems: string[];

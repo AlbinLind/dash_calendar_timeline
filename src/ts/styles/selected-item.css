@@ -4,3 +4,9 @@
   padding: 5px;
   z-index: 1000;
 }
+
+.selected-item-info-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}

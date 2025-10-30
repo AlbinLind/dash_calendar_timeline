@@ -71,6 +71,12 @@ class DashCalendarTimeline(Component):
         - hoverInfo (string; optional):
             Hover information for the item, can be html to show.
 
+        - sku (number; optional):
+            SKU number for the item.
+
+        - is_fixed (boolean; optional):
+            Is the item fixed in position.
+
         - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
             If you want some input fields to be shown for the item, you
             can specify them here.  When the input field changes it will
@@ -102,6 +108,9 @@ class DashCalendarTimeline(Component):
         - stackItems (boolean; optional)
 
         - height (number; optional)
+
+    - isFixedChanged (boolean; optional):
+        Is fixed value of the item that was changed for the selected item.
 
     - item_height_ratio (number; optional)
 
@@ -148,6 +157,12 @@ class DashCalendarTimeline(Component):
         - hoverInfo (string; optional):
             Hover information for the item, can be html to show.
 
+        - sku (number; optional):
+            SKU number for the item.
+
+        - is_fixed (boolean; optional):
+            Is the item fixed in position.
+
         - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
             If you want some input fields to be shown for the item, you
             can specify them here.  When the input field changes it will
@@ -175,6 +190,9 @@ class DashCalendarTimeline(Component):
             The option that was clicked, defined in the context menu.
 
     - selectedItemInput (dict with strings as keys and values of type boolean | number | string | dict | list; optional)
+
+    - skuChanged (number; optional):
+        SKU number of the item that was changed for the selected item.
 
     - use_resize_handle (boolean; optional):
         Should you only be able to resize from the ends? Defaults to True.
@@ -212,6 +230,8 @@ class DashCalendarTimeline(Component):
             "canChangeGroup": NotRequired[bool],
             "itemProps": NotRequired["ItemsItemProps"],
             "hoverInfo": NotRequired[str],
+            "sku": NotRequired[NumberType],
+            "is_fixed": NotRequired[bool],
             "inputs": NotRequired[
                 typing.Dict[
                     typing.Union[str, float, int],
@@ -257,6 +277,8 @@ class DashCalendarTimeline(Component):
             "canChangeGroup": NotRequired[bool],
             "itemProps": NotRequired["ClickedItemItemProps"],
             "hoverInfo": NotRequired[str],
+            "sku": NotRequired[NumberType],
+            "is_fixed": NotRequired[bool],
             "inputs": NotRequired[
                 typing.Dict[
                     typing.Union[str, float, int],
@@ -291,6 +313,8 @@ class DashCalendarTimeline(Component):
             typing.Dict[typing.Union[str, float, int], typing.Any]
         ] = None,
         rightClickedEvent: typing.Optional["RightClickedEvent"] = None,
+        skuChanged: typing.Optional[NumberType] = None,
+        isFixedChanged: typing.Optional[bool] = None,
         id: typing.Optional[typing.Union[str, dict]] = None,
         **kwargs,
     ):
@@ -302,6 +326,7 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "groups",
+            "isFixedChanged",
             "item_height_ratio",
             "items",
             "line_height",
@@ -309,6 +334,7 @@ class DashCalendarTimeline(Component):
             "min_zoom",
             "rightClickedEvent",
             "selectedItemInput",
+            "skuChanged",
             "use_resize_handle",
             "visible_time_end",
             "visible_time_start",
@@ -322,6 +348,7 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "groups",
+            "isFixedChanged",
             "item_height_ratio",
             "items",
             "line_height",
@@ -329,6 +356,7 @@ class DashCalendarTimeline(Component):
             "min_zoom",
             "rightClickedEvent",
             "selectedItemInput",
+            "skuChanged",
             "use_resize_handle",
             "visible_time_end",
             "visible_time_start",

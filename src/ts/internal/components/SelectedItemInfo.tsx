@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { SelectedItemInfoProps } from "types/types";
 
@@ -7,10 +7,21 @@ export function SelectedItemInfo({
   setProps,
   selectedItemProps,
   onDelete,
+  onItemFix,
+  onSkuChange,
 }: SelectedItemInfoProps) {
-  if (item == null) {
+  const [sku, setSku] = useState<number>(item?.sku || 0);
+  const [isFixed, setIsFixed] = useState<boolean>(item?.is_fixed || false);
+
+  useEffect(() => {
+    setSku(item?.sku || 0);
+    setIsFixed(item?.is_fixed || false);
+  }, [item]);
+
+  if (item === undefined) {
     return <></>;
   }
+
   let x = item.mousePosition.x + 5;
   let y = item.mousePosition.y + 5;
 
@@ -23,17 +34,43 @@ export function SelectedItemInfo({
       }}
       className="selected-item-info"
     >
-      <b>{item.title}</b>
-      <button type="button" onClick={() => onDelete(item.id)}>
-        🗑
-      </button>
-      <br />
-      Start: {new Date(item.start_time).toLocaleString()}
-      <br />
-      End: {new Date(item.end_time).toLocaleString()}
-      <br />
-      Line: {item.group}
-      <br />
+      <div className="selected-item-info-inputs">
+        <button type="button" onClick={() => onDelete(item.id)}>
+          🗑
+        </button>
+        <div>
+          <label htmlFor="is-fixed-check">Is Fixed</label>
+          <input
+            type="checkbox"
+            name="Is Fixed"
+            id="is-fixed-check"
+            checked={isFixed}
+            onChange={(e) => {
+              setIsFixed(e.target.checked);
+              setProps({
+                isFixedChanged: e.target.checked,
+              });
+              onItemFix(item.id, e.target.checked);
+            }}
+          />
+        </div>
+        <div>
+          <label htmlFor="sku-input">SKU</label>
+          <input
+            type="number"
+            name="SKU"
+            id="sku-input"
+            value={sku}
+            onChange={(e) => {
+              setSku(Number(e.target.value));
+              setProps({
+                skuChanged: Number(e.target.value),
+              });
+              onSkuChange(item.id, Number(e.target.value));
+            }}
+          />
+        </div>
+      </div>
       {item.hoverInfo && <div dangerouslySetInnerHTML={{ __html: item.hoverInfo }}></div>}
       {/*Dynamically add inputs and update props*/}
       {item.inputs &&
