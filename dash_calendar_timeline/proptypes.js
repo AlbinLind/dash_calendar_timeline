@@ -22,5 +22,6 @@ pk.DashCalendarTimeline.propTypes = {items:pt.arrayOf(pt.shape({id:pt.oneOfType(
  rightClickedEvent:pt.shape({time:pt.number,group_id:pt.oneOfType([pt.string,pt.number]),option:pt.string}),
  skuChanged:pt.number,
  isFixedChanged:pt.bool,
+ externalDrop:pt.shape({data:pt.any,time:pt.number,groupId:pt.oneOfType([pt.string,pt.number])}),
  id:pt.string,
  setProps:pt.any};

@@ -97,6 +97,16 @@ class DashCalendarTimeline(Component):
 
     - enable_external_drop (boolean; optional)
 
+    - externalDrop (dict; required)
+
+        `externalDrop` is a dict with keys:
+
+        - data (boolean | number | string | dict | list; required)
+
+        - time (number; required)
+
+        - groupId (string | number; required)
+
     - groups (list of dicts; required)
 
         `groups` is a list of dicts with keys:
@@ -295,6 +305,15 @@ class DashCalendarTimeline(Component):
         {"time": NumberType, "group_id": typing.Union[str, NumberType], "option": str},
     )
 
+    ExternalDrop = TypedDict(
+        "ExternalDrop",
+        {
+            "data": typing.Any,
+            "time": NumberType,
+            "groupId": typing.Union[str, NumberType],
+        },
+    )
+
     def __init__(
         self,
         items: typing.Optional[typing.Sequence["Items"]] = None,
@@ -318,6 +337,7 @@ class DashCalendarTimeline(Component):
         rightClickedEvent: typing.Optional["RightClickedEvent"] = None,
         skuChanged: typing.Optional[NumberType] = None,
         isFixedChanged: typing.Optional[bool] = None,
+        externalDrop: typing.Optional["ExternalDrop"] = None,
         id: typing.Optional[typing.Union[str, dict]] = None,
         **kwargs,
     ):
@@ -329,6 +349,7 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "enable_external_drop",
+            "externalDrop",
             "groups",
             "isFixedChanged",
             "item_height_ratio",
@@ -352,6 +373,7 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "enable_external_drop",
+            "externalDrop",
             "groups",
             "isFixedChanged",
             "item_height_ratio",
@@ -372,7 +394,7 @@ class DashCalendarTimeline(Component):
         _locals.update(kwargs)  # For wildcard attrs and excess named props
         args = {k: _locals[k] for k in _explicit_args}
 
-        for k in ["groups", "items"]:
+        for k in ["externalDrop", "groups", "items"]:
             if k not in args:
                 raise TypeError("Required argument `" + k + "` was not specified.")
 
