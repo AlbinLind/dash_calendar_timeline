@@ -95,6 +95,8 @@ class DashCalendarTimeline(Component):
     - drag_snap (number; optional):
         Snap dragged items to a time interval (in milliseconds).
 
+    - enable_external_drop (boolean; optional)
+
     - groups (list of dicts; required)
 
         `groups` is a list of dicts with keys:
@@ -307,6 +309,7 @@ class DashCalendarTimeline(Component):
         context_menu_options: typing.Optional[typing.Sequence[str]] = None,
         visible_time_start: typing.Optional[NumberType] = None,
         visible_time_end: typing.Optional[NumberType] = None,
+        enable_external_drop: typing.Optional[bool] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -325,6 +328,7 @@ class DashCalendarTimeline(Component):
             "default_time_end",
             "default_time_start",
             "drag_snap",
+            "enable_external_drop",
             "groups",
             "isFixedChanged",
             "item_height_ratio",
@@ -347,6 +351,7 @@ class DashCalendarTimeline(Component):
             "default_time_end",
             "default_time_start",
             "drag_snap",
+            "enable_external_drop",
             "groups",
             "isFixedChanged",
             "item_height_ratio",
