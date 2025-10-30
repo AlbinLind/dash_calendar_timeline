@@ -245,24 +245,11 @@ const DashCalendarTimeline = (props: Props) => {
 
       const offsetX = event.clientX - rect.left;
       const offsetY = event.clientY - rect.top;
-      console.log("Calculating group index with offsetY:", offsetY, "and lineHeight:", lineHeight);
 
       const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
-      console.log("Calculated group index:", groupIdx);
       const group_id = props.groups[groupIdx].id;
-      console.log("Groups", props.groups);
-      console.log("Calculated group id:", group_id);
       const start = visibleTimeStart ?? defaultTimeStart;
       const end = visibleTimeEnd ?? defaultTimeEnd;
-      console.log("Calculating drop time with:", {
-        offsetX,
-        rect,
-        canvas,
-        visibleTimeStart,
-        visibleTimeEnd,
-        start,
-        end,
-      }); // Debug log
       const dropTime = start + (offsetX / rect.width) * (end - start);
 
       setProps({
@@ -341,7 +328,6 @@ const DashCalendarTimeline = (props: Props) => {
             if (!isFixed) {
               return { ...item, is_fixed: false };
             }
-            console.log(item);
             if (item.start_time < fixedItem.end_time) {
               return { ...item, is_fixed: true };
             }
