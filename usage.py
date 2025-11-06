@@ -11,6 +11,7 @@ app.layout = dash.html.Div(
             id="component",
             default_time_start=datetime.datetime(2025, 1, 1, 12, 0).timestamp() * 1000,
             default_time_end=datetime.datetime(2025, 1, 4, 0, 0).timestamp() * 1000,
+            enable_week_headers=True,  # Enable week headers when zoomed to 1-2 weeks visible
             items=[
                 {
                     "id": 1,
@@ -166,4 +167,4 @@ def log_item_changes(sku_changed, is_fixed_changed):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=8124)

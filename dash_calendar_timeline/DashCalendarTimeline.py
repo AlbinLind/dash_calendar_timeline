@@ -97,6 +97,10 @@ class DashCalendarTimeline(Component):
 
     - enable_external_drop (boolean; optional)
 
+    - enable_week_headers (boolean; optional):
+        Enable week headers when zoomed between 1 and 2 weeks visible.
+        Defaults to False.
+
     - externalDrop (dict; optional)
 
         `externalDrop` is a dict with keys:
@@ -211,7 +215,11 @@ class DashCalendarTimeline(Component):
 
     - visible_time_end (number; optional)
 
-    - visible_time_start (number; optional)"""
+    - visible_time_start (number; optional)
+
+    - week_header_max_days (number; optional):
+        Maximum number of days visible to show week headers. Defaults to
+        21 (3 weeks)."""
 
     _children_props = []
     _base_nodes = ["children"]
@@ -329,6 +337,8 @@ class DashCalendarTimeline(Component):
         visible_time_start: typing.Optional[NumberType] = None,
         visible_time_end: typing.Optional[NumberType] = None,
         enable_external_drop: typing.Optional[bool] = None,
+        enable_week_headers: typing.Optional[bool] = None,
+        week_header_max_days: typing.Optional[NumberType] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -349,6 +359,7 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "enable_external_drop",
+            "enable_week_headers",
             "externalDrop",
             "groups",
             "isFixedChanged",
@@ -363,6 +374,7 @@ class DashCalendarTimeline(Component):
             "use_resize_handle",
             "visible_time_end",
             "visible_time_start",
+            "week_header_max_days",
         ]
         self._valid_wildcard_attributes = []
         self.available_properties = [
@@ -373,6 +385,7 @@ class DashCalendarTimeline(Component):
             "default_time_start",
             "drag_snap",
             "enable_external_drop",
+            "enable_week_headers",
             "externalDrop",
             "groups",
             "isFixedChanged",
@@ -387,6 +400,7 @@ class DashCalendarTimeline(Component):
             "use_resize_handle",
             "visible_time_end",
             "visible_time_start",
+            "week_header_max_days",
         ]
         self.available_wildcard_properties = []
         _explicit_args = kwargs.pop("_explicit_args")

@@ -16,6 +16,8 @@ pk.DashCalendarTimeline.propTypes = {items:pt.arrayOf(pt.shape({id:pt.oneOfType(
  visible_time_start:pt.number,
  visible_time_end:pt.number,
  enable_external_drop:pt.bool,
+ enable_week_headers:pt.bool,
+ week_header_max_days:pt.number,
  use_resize_handle:pt.bool,
  clickedItem:pt.shape({id:pt.oneOfType([pt.string,pt.number]),group:pt.oneOfType([pt.string,pt.number]),title:pt.string,start_time:pt.number,end_time:pt.number,canMove:pt.bool,canResize:pt.oneOfType([pt.oneOf(["left"]),pt.oneOf(["right"]),pt.oneOf(["both"])]),canChangeGroup:pt.bool,itemProps:pt.shape({className:pt.string,style:pt.objectOf(pt.any)}),hoverInfo:pt.string,sku:pt.number,is_fixed:pt.bool,inputs:pt.objectOf(pt.objectOf(pt.any))}),
  selectedItemInput:pt.objectOf(pt.any),

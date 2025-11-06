@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import Timeline from "react-calendar-timeline";
+import Timeline, { TimelineHeaders, DateHeader, SidebarHeader } from "react-calendar-timeline";
+import dayjs from "dayjs";
+import weekOfYear from "dayjs/plugin/weekOfYear";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
 import "../styles/base.css";
 import { SelectedItemInfo } from "../internal/components/SelectedItemInfo";
 import { CalendarItem, Props, rightClickProps, SelectedCalendarItemProps } from "types/types";
 import { RightClickOutsideHandler } from "../internal/components/RightClickOutsideHandler";
+
+// Enable week of year plugin for dayjs
+dayjs.extend(weekOfYear);
 
 function transformItems(items: CalendarItem[]): CalendarItem[] {
   return items.map((item) => ({
@@ -216,6 +221,49 @@ const DashCalendarTimeline = (props: Props) => {
     updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
   };
 
+  /**
+   * Determine the appropriate header units based on the visible time range
+   * Returns [primaryUnit, secondaryUnit]
+   *
+   * Hierarchy: minute → hour → day → week → month → year
+   */
+  const getHeaderUnits = (): [string, string] => {
+    if (!props.enable_week_headers) {
+      return ["primaryHeader", "day"];
+    }
+
+    const start = visibleTimeStart ?? defaultTimeStart;
+    const end = visibleTimeEnd ?? defaultTimeEnd;
+    const visibleDuration = end - start;
+    const daysVisible = visibleDuration / (1000 * 60 * 60 * 24);
+
+    // Default to 21 days (3 weeks) if not specified
+    const maxWeekDays = props.week_header_max_days ?? 21;
+
+    // Less than 2 days: show hours and days
+    if (daysVisible < 2) {
+      return ["day", "hour"];
+    }
+
+    // 2 days to maxWeekDays: show days (bottom) with week as primary (top)
+    if (daysVisible <= maxWeekDays) {
+      return ["week", "day"];
+    }
+
+    // maxWeekDays to ~60 days: show weeks (bottom) with months (top)
+    if (daysVisible < 60) {
+      return ["month", "week"];
+    }
+
+    // 60 to 365 days: show months (bottom) with year as primary (top)
+    if (daysVisible < 365) {
+      return ["year", "month"];
+    }
+
+    // More than 365 days: show years
+    return ["primaryHeader", "year"];
+  };
+
   useEffect(() => {
     if (!props.enable_external_drop) {
       return;
@@ -307,7 +355,47 @@ const DashCalendarTimeline = (props: Props) => {
         onTimeChange={onTimeChange}
         visibleTimeStart={visibleTimeStart}
         visibleTimeEnd={visibleTimeEnd}
-      />
+      >
+        {props.enable_week_headers &&
+          (() => {
+            const [primaryUnit, secondaryUnit] = getHeaderUnits();
+
+            // Custom label formatter for week headers to show "Week X" instead of "W"
+            const weekLabelFormat = (
+              [startTime, endTime]: [any, any],
+              unit: string,
+              labelWidth: number,
+            ) => {
+              if (unit === "week") {
+                // Ensure we have a dayjs object
+                const dayjsStart = dayjs.isDayjs(startTime) ? startTime : dayjs(startTime);
+                const weekNumber = dayjsStart.week();
+                return `Week ${weekNumber}`;
+              }
+              // For other units, use the default formatting
+              const dayjsStart = dayjs.isDayjs(startTime) ? startTime : dayjs(startTime);
+              return dayjsStart.format();
+            };
+
+            return (
+              <TimelineHeaders>
+                <SidebarHeader>
+                  {({ getRootProps }) => {
+                    return <div {...getRootProps()} />;
+                  }}
+                </SidebarHeader>
+                <DateHeader
+                  unit={primaryUnit as any}
+                  labelFormat={primaryUnit === "week" ? weekLabelFormat : undefined}
+                />
+                <DateHeader
+                  unit={secondaryUnit as any}
+                  labelFormat={secondaryUnit === "week" ? weekLabelFormat : undefined}
+                />
+              </TimelineHeaders>
+            );
+          })()}
+      </Timeline>
       {showContextMenu && <RightClickOutsideHandler {...showContextMenu} />}
       <SelectedItemInfo
         item={shownItemInfo}

@@ -74,6 +74,10 @@ export type Props = {
   visible_time_start?: number;
   visible_time_end?: number;
   enable_external_drop?: boolean;
+  /** Enable week headers when zoomed between 1 and 2 weeks visible. Defaults to false */
+  enable_week_headers?: boolean;
+  /** Maximum number of days visible to show week headers. Defaults to 21 (3 weeks) */
+  week_header_max_days?: number;
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;
