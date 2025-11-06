@@ -82,6 +82,9 @@ export function SelectedItemInfo({
               .slice(0, 16)}
             onChange={(e) => {
               const localTime = new Date(e.target.value).getTime();
+              setProps({
+                startTimeChanged: localTime,
+              });
               onStartTimeChange && onStartTimeChange(item.id, localTime);
             }}
           />
@@ -97,6 +100,9 @@ export function SelectedItemInfo({
               .slice(0, 16)}
             onChange={(e) => {
               const localTime = new Date(e.target.value).getTime();
+              setProps({
+                endTimeChanged: localTime,
+              });
               onEndTimeChange && onEndTimeChange(item.id, localTime);
             }}
           />
