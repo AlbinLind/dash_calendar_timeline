@@ -12,6 +12,9 @@ import { RightClickOutsideHandler } from "../internal/components/RightClickOutsi
 // Enable week of year plugin for dayjs
 dayjs.extend(weekOfYear);
 
+// Configure dayjs to start weeks on Monday (1) instead of Sunday (0)
+dayjs.Ls.en.weekStart = 1;
+
 function transformItems(items: CalendarItem[]): CalendarItem[] {
   return items.map((item) => ({
     canResize: "both",
