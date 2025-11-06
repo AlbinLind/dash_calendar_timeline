@@ -339,7 +339,11 @@ const DashCalendarTimeline = (props: Props) => {
     <div id={id} ref={timelineRef}>
       <Timeline
         groups={props.groups}
-        items={items}
+        items={items.filter((item) =>
+          props.deselected_legend_items
+            ? !props.deselected_legend_items.includes(item.legend || "")
+            : true,
+        )}
         defaultTimeStart={defaultTimeStart}
         defaultTimeEnd={defaultTimeEnd}
         dragSnap={props.drag_snap}

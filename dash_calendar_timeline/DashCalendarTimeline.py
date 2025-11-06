@@ -77,6 +77,8 @@ class DashCalendarTimeline(Component):
         - is_fixed (boolean; optional):
             Is the item fixed in position.
 
+        - legend (string; optional)
+
         - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
             If you want some input fields to be shown for the item, you
             can specify them here.  When the input field changes it will
@@ -91,6 +93,9 @@ class DashCalendarTimeline(Component):
 
     - default_time_start (number; optional):
         Default start time for the timeline.
+
+    - deselected_legend_items (list of strings; optional):
+        Legend items that are not selected.
 
     - drag_snap (number; optional):
         Snap dragged items to a time interval (in milliseconds).
@@ -179,6 +184,8 @@ class DashCalendarTimeline(Component):
         - is_fixed (boolean; optional):
             Is the item fixed in position.
 
+        - legend (string; optional)
+
         - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
             If you want some input fields to be shown for the item, you
             can specify them here.  When the input field changes it will
@@ -252,6 +259,7 @@ class DashCalendarTimeline(Component):
             "hoverInfo": NotRequired[str],
             "sku": NotRequired[NumberType],
             "is_fixed": NotRequired[bool],
+            "legend": NotRequired[str],
             "inputs": NotRequired[
                 typing.Dict[
                     typing.Union[str, float, int],
@@ -299,6 +307,7 @@ class DashCalendarTimeline(Component):
             "hoverInfo": NotRequired[str],
             "sku": NotRequired[NumberType],
             "is_fixed": NotRequired[bool],
+            "legend": NotRequired[str],
             "inputs": NotRequired[
                 typing.Dict[
                     typing.Union[str, float, int],
@@ -339,6 +348,7 @@ class DashCalendarTimeline(Component):
         enable_external_drop: typing.Optional[bool] = None,
         enable_week_headers: typing.Optional[bool] = None,
         week_header_max_days: typing.Optional[NumberType] = None,
+        deselected_legend_items: typing.Optional[typing.Sequence[str]] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -357,6 +367,7 @@ class DashCalendarTimeline(Component):
             "context_menu_options",
             "default_time_end",
             "default_time_start",
+            "deselected_legend_items",
             "drag_snap",
             "enable_external_drop",
             "enable_week_headers",
@@ -383,6 +394,7 @@ class DashCalendarTimeline(Component):
             "context_menu_options",
             "default_time_end",
             "default_time_start",
+            "deselected_legend_items",
             "drag_snap",
             "enable_external_drop",
             "enable_week_headers",

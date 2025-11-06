@@ -12,6 +12,9 @@ app.layout = dash.html.Div(
             default_time_start=datetime.datetime(2025, 1, 1, 12, 0).timestamp() * 1000,
             default_time_end=datetime.datetime(2025, 1, 4, 0, 0).timestamp() * 1000,
             enable_week_headers=True,  # Enable week headers when zoomed to 1-2 weeks visible
+            deselected_legend_items=[
+                "Test Legend"
+            ],  # Example of deselecting a legend item
             items=[
                 {
                     "id": 1,

@@ -29,6 +29,7 @@ export type CalendarItem = {
   sku?: number;
   /** Is the item fixed in position */
   is_fixed?: boolean;
+  legend?: string;
   /** If you want some input fields to be shown for the item, you can specify them here.
    *
    * When the input field changes it will update the `selectedItemInput` prop with the new values.
@@ -78,6 +79,8 @@ export type Props = {
   enable_week_headers?: boolean;
   /** Maximum number of days visible to show week headers. Defaults to 21 (3 weeks) */
   week_header_max_days?: number;
+  /** Legend items that are not selected */
+  deselected_legend_items?: string[];
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;
