@@ -229,7 +229,7 @@ const DashCalendarTimeline = (props: Props) => {
    */
   const getHeaderUnits = (): [string, string] => {
     if (!props.enable_week_headers) {
-      return ["primaryHeader", "day"];
+      return ["day", "day"];
     }
 
     const start = visibleTimeStart ?? defaultTimeStart;
@@ -261,7 +261,17 @@ const DashCalendarTimeline = (props: Props) => {
     }
 
     // More than 365 days: show years
-    return ["primaryHeader", "year"];
+    return ["year", "year"];
+  };
+
+  // Custom interval renderer to add primary header styling
+  const primaryIntervalRenderer = ({ getIntervalProps, intervalContext }: any) => {
+    const { key, ...rest } = getIntervalProps();
+    return (
+      <div {...rest} key={key} className="rct-dateHeader rct-dateHeader-primary">
+        <span>{intervalContext.intervalText}</span>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -387,7 +397,7 @@ const DashCalendarTimeline = (props: Props) => {
                 <DateHeader
                   unit={primaryUnit as any}
                   labelFormat={primaryUnit === "week" ? weekLabelFormat : undefined}
-                  className="rct-headerDate-primary"
+                  intervalRenderer={primaryIntervalRenderer}
                 />
                 <DateHeader
                   unit={secondaryUnit as any}
