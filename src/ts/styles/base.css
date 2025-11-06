@@ -6,3 +6,21 @@
     cursor: w-resize !important;
   }
 }
+
+/* Make header interval text stay visible when scrolled, similar to item titles */
+.rct-calendar-header .rct-dateHeader {
+  position: relative;
+  overflow: visible;
+}
+
+.rct-calendar-header .rct-dateHeader > div {
+  overflow: visible;
+}
+
+.rct-calendar-header .rct-dateHeader span {
+  position: sticky;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: inline-block;
+}
