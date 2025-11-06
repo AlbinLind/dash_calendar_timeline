@@ -398,7 +398,11 @@ const DashCalendarTimeline = (props: Props) => {
               <TimelineHeaders>
                 <SidebarHeader>
                   {({ getRootProps }) => {
-                    return <div {...getRootProps()} className="sidebarHeader" />;
+                    return (
+                      <div {...getRootProps()} className="sidebarHeader">
+                        {props.top_left_sidebar_content}
+                      </div>
+                    );
                   }}
                 </SidebarHeader>
                 <DateHeader

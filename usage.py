@@ -65,6 +65,7 @@ app.layout = dash.html.Div(
                 },
             ],
             context_menu_options=["Option 1", "Option 2", "Option 3"],
+            top_left_sidebar_content=dash.html.Div("Custom Sidebar Header Content"),
         ),
         dash.html.Button(
             "Reset Time", id="reset-time-button"

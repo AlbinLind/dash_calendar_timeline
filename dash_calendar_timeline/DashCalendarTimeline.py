@@ -217,6 +217,8 @@ class DashCalendarTimeline(Component):
     - skuChanged (number; optional):
         SKU number of the item that was changed for the selected item.
 
+    - top_left_sidebar_content (a list of or a singular dash component, string or number; optional)
+
     - use_resize_handle (boolean; optional):
         Should you only be able to resize from the ends? Defaults to True.
 
@@ -228,8 +230,8 @@ class DashCalendarTimeline(Component):
         Maximum number of days visible to show week headers. Defaults to
         21 (3 weeks)."""
 
-    _children_props = []
-    _base_nodes = ["children"]
+    _children_props = ["top_left_sidebar_content"]
+    _base_nodes = ["top_left_sidebar_content", "children"]
     _namespace = "dash_calendar_timeline"
     _type = "DashCalendarTimeline"
     ItemsItemProps = TypedDict(
@@ -349,6 +351,7 @@ class DashCalendarTimeline(Component):
         enable_week_headers: typing.Optional[bool] = None,
         week_header_max_days: typing.Optional[NumberType] = None,
         deselected_legend_items: typing.Optional[typing.Sequence[str]] = None,
+        top_left_sidebar_content: typing.Optional[ComponentType] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
@@ -382,6 +385,7 @@ class DashCalendarTimeline(Component):
             "rightClickedEvent",
             "selectedItemInput",
             "skuChanged",
+            "top_left_sidebar_content",
             "use_resize_handle",
             "visible_time_end",
             "visible_time_start",
@@ -409,6 +413,7 @@ class DashCalendarTimeline(Component):
             "rightClickedEvent",
             "selectedItemInput",
             "skuChanged",
+            "top_left_sidebar_content",
             "use_resize_handle",
             "visible_time_end",
             "visible_time_start",

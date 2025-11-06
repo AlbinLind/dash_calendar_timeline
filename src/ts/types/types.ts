@@ -81,6 +81,7 @@ export type Props = {
   week_header_max_days?: number;
   /** Legend items that are not selected */
   deselected_legend_items?: string[];
+  top_left_sidebar_content?: React.ReactNode;
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;
