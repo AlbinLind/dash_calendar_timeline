@@ -387,6 +387,7 @@ const DashCalendarTimeline = (props: Props) => {
                 <DateHeader
                   unit={primaryUnit as any}
                   labelFormat={primaryUnit === "week" ? weekLabelFormat : undefined}
+                  className="rct-headerDate-primary"
                 />
                 <DateHeader
                   unit={secondaryUnit as any}
