@@ -444,6 +444,20 @@ const DashCalendarTimeline = (props: Props) => {
           setItems(newItems);
           setProps({ items: newItems });
         }}
+        onStartTimeChange={(itemId, startTime) => {
+          const newItems = items.map((item) =>
+            item.id === itemId ? { ...item, start_time: startTime } : item,
+          );
+          setItems(newItems);
+          setProps({ items: newItems });
+        }}
+        onEndTimeChange={(itemId, endTime) => {
+          const newItems = items.map((item) =>
+            item.id === itemId ? { ...item, end_time: endTime } : item,
+          );
+          setItems(newItems);
+          setProps({ items: newItems });
+        }}
       />
     </div>
   );

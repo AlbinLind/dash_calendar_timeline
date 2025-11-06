@@ -120,6 +120,8 @@ export type SelectedItemInfoProps = {
   onDelete: (itemId: string | number) => void;
   onItemFix: (itemId: string | number, isFixed: boolean) => void;
   onSkuChange: (itemId: string | number, sku: number) => void;
+  onStartTimeChange: (itemId: string | number, startTime: number) => void;
+  onEndTimeChange: (itemId: string | number, endTime: number) => void;
 };
 export type rightClickProps = {
   contextItems: string[];

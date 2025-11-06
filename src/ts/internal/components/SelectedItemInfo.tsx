@@ -9,6 +9,8 @@ export function SelectedItemInfo({
   onDelete,
   onItemFix,
   onSkuChange,
+  onStartTimeChange,
+  onEndTimeChange,
 }: SelectedItemInfoProps) {
   const [sku, setSku] = useState<number>(item?.sku || 0);
   const [isFixed, setIsFixed] = useState<boolean>(item?.is_fixed || false);
@@ -67,6 +69,35 @@ export function SelectedItemInfo({
                 skuChanged: Number(e.target.value),
               });
               onSkuChange(item.id, Number(e.target.value));
+            }}
+          />
+        </div>
+        <div>
+          <label htmlFor="start-time-input">Start Time</label>
+          <input
+            type="datetime-local"
+            id="start-time-input"
+            value={new Date(item.start_time - new Date().getTimezoneOffset() * 60000)
+              .toISOString()
+              .slice(0, 16)}
+            onChange={(e) => {
+              const localTime = new Date(e.target.value).getTime();
+              onStartTimeChange && onStartTimeChange(item.id, localTime);
+            }}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="end-time-input">End Time</label>
+          <input
+            type="datetime-local"
+            id="end-time-input"
+            value={new Date(item.end_time - new Date().getTimezoneOffset() * 60000)
+              .toISOString()
+              .slice(0, 16)}
+            onChange={(e) => {
+              const localTime = new Date(e.target.value).getTime();
+              onEndTimeChange && onEndTimeChange(item.id, localTime);
             }}
           />
         </div>
