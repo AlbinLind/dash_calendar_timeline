@@ -12,11 +12,11 @@ export function SelectedItemInfo({
   onStartTimeChange,
   onEndTimeChange,
 }: SelectedItemInfoProps) {
-  const [sku, setSku] = useState<number>(item?.sku || 0);
+  const [sku, setSku] = useState<number | string>(item?.sku || "");
   const [isFixed, setIsFixed] = useState<boolean>(item?.is_fixed || false);
 
   useEffect(() => {
-    setSku(item?.sku || 0);
+    setSku(item?.sku || "");
     setIsFixed(item?.is_fixed || false);
   }, [item]);
 
@@ -62,8 +62,13 @@ export function SelectedItemInfo({
             type="number"
             name="SKU"
             id="sku-input"
+            min={0}
             value={sku}
             onChange={(e) => {
+              if (e.target.value === "") {
+                setSku("");
+                return;
+              }
               setSku(Number(e.target.value));
               setProps({
                 skuChanged: Number(e.target.value),
