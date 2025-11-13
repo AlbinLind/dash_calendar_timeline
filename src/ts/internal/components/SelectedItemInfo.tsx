@@ -69,6 +69,9 @@ export function SelectedItemInfo({
                 setSku("");
                 return;
               }
+              if (Number(e.target.value) < 0 || isNaN(Number(e.target.value))) {
+                return;
+              }
               setSku(Number(e.target.value));
               setProps({
                 skuChanged: Number(e.target.value),
