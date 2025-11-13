@@ -439,6 +439,11 @@ const DashCalendarTimeline = (props: Props) => {
               return { ...item, is_fixed: false };
             }
             if (item.start_time < fixedItem.end_time) {
+              // If drp id exists on the item, we check that it is not negative
+              // -2 is cleaning
+              if (item["drp_id"] !== undefined && item["drp_id"] < 0 && item["drp_id"] !== -2) {
+                return item;
+              }
               return { ...item, is_fixed: true };
             }
             return item;
