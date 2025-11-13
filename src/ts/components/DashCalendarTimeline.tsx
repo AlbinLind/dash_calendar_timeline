@@ -455,6 +455,7 @@ const DashCalendarTimeline = (props: Props) => {
           const newItems = items.map((item) => (item.id === itemId ? { ...item, sku: sku } : item));
           setItems(newItems);
           setProps({ items: newItems });
+          setShownItemInfo((prev) => (prev ? { ...prev, sku: sku } : prev));
         }}
         onStartTimeChange={(itemId, startTime) => {
           const newItems = items.map((item) =>
