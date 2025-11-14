@@ -82,6 +82,8 @@ export type Props = {
   /** Legend items that are not selected */
   deselected_legend_items?: string[];
   top_left_sidebar_content?: React.ReactNode;
+  /** dayjs locale to use for date formatting. Defaults to 'en'. Examples: 'en', 'fr', 'es', 'de', etc. */
+  locale?: "en" | "de" | "sv" | "nl";
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;

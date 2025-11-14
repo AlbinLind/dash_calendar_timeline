@@ -11,6 +11,11 @@ import { CalendarItem, Props, rightClickProps, SelectedCalendarItemProps } from 
 import { RightClickOutsideHandler } from "../internal/components/RightClickOutsideHandler";
 import { CustomItemRenderer } from "../renderers/CustomItemRenderer";
 
+// Import all commonly used dayjs locales
+import "dayjs/locale/de";
+import "dayjs/locale/nl";
+import "dayjs/locale/sv";
+
 // Enable week of year plugin for dayjs
 dayjs.extend(weekOfYear);
 
@@ -28,7 +33,12 @@ function transformItems(items: CalendarItem[]): CalendarItem[] {
  * Component description
  */
 const DashCalendarTimeline = (props: Props) => {
-  const { id, setProps } = props;
+  const { id, setProps, locale = "en" } = props;
+
+  // Set dayjs locale (locales are preloaded via imports above)
+  useEffect(() => {
+    dayjs.locale(locale);
+  }, [locale]);
 
   const [items, setItems] = useState(transformItems(props.items));
   const [visibleTimeStart, setVisibleTimeStart] = useState<number | undefined>(
