@@ -194,9 +194,9 @@ class DashCalendarTimeline(Component):
 
     - line_height (number; optional)
 
-    - locale (a value equal to: 'en', 'de', 'sv', 'nl'; optional):
-        dayjs locale to use for date formatting. Defaults to 'en'.
-        Examples: 'en', 'fr', 'es', 'de', etc.
+    - locale (string; optional):
+        dayjs locale to use for date formatting. Defaults to 'en'. Should
+        be one of \"en\", \"de\", \"sv\", \"nl\".
 
     - max_zoom (number; optional)
 
@@ -356,7 +356,7 @@ class DashCalendarTimeline(Component):
         week_header_max_days: typing.Optional[NumberType] = None,
         deselected_legend_items: typing.Optional[typing.Sequence[str]] = None,
         top_left_sidebar_content: typing.Optional[ComponentType] = None,
-        locale: typing.Optional[Literal["en", "de", "sv", "nl"]] = None,
+        locale: typing.Optional[str] = None,
         use_resize_handle: typing.Optional[bool] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
