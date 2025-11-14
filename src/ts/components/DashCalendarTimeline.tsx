@@ -5,9 +5,11 @@ import weekOfYear from "dayjs/plugin/weekOfYear";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
 import "../styles/base.css";
+import "../styles/resize-handle.css";
 import { SelectedItemInfo } from "../internal/components/SelectedItemInfo";
 import { CalendarItem, Props, rightClickProps, SelectedCalendarItemProps } from "types/types";
 import { RightClickOutsideHandler } from "../internal/components/RightClickOutsideHandler";
+import { CustomItemRenderer } from "../renderers/CustomItemRenderer";
 
 // Enable week of year plugin for dayjs
 dayjs.extend(weekOfYear);
@@ -161,33 +163,17 @@ const DashCalendarTimeline = (props: Props) => {
     }
   };
 
-  // Slightly modfied default item renderer from react-calendar-timeline to add mouse events
+  // Custom item renderer with resize handles only visible when selected
   const itemRenderer = ({ item, itemContext, getItemProps, getResizeProps }: any) => {
-    const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
-    const { key, ref, ...rest } = getItemProps(item.itemProps ?? {});
-    const { useResizeHandle } = itemContext;
-
     return (
-      <div
+      <CustomItemRenderer
+        item={item}
+        itemContext={itemContext}
+        getItemProps={getItemProps}
+        getResizeProps={getResizeProps}
         onMouseEnter={(e) => onMouseEnter(item.id, e)}
         onMouseLeave={onMouseLeave}
-        {...rest}
-        ref={ref}
-        key={`${key}-outer`}
-        isfixed={item.is_fixed ? "true" : "false"}
-      >
-        {useResizeHandle ? <div {...leftResizeProps} key={`${key}-lr`} /> : null}
-
-        <div
-          className="rct-item-content"
-          style={{ maxHeight: `${itemContext.dimensions.height}` }}
-          key={`${key}-content`}
-        >
-          {itemContext.title}
-        </div>
-
-        {useResizeHandle ? <div {...rightResizeProps} key={`${key}-rr`} /> : null}
-      </div>
+      />
     );
   };
 

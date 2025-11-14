@@ -1,0 +1,13 @@
+/* Resize handle visibility styles */
+
+/* Hidden by default - no opacity or interaction */
+.rct-resize-handle-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Visible when item is selected */
+.rct-resize-handle-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
