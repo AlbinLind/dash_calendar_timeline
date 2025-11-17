@@ -455,11 +455,25 @@ const DashCalendarTimeline = (props: Props) => {
         }}
         onStartTimeChange={(itemId, startTime) => {
           const newItems = items.map((item) =>
-            item.id === itemId ? { ...item, start_time: startTime } : item,
+            item.id === itemId
+              ? {
+                  ...item,
+                  start_time: startTime,
+                  end_time: startTime - item.start_time + item.end_time,
+                }
+              : item,
           );
           setItems(newItems);
           setProps({ items: newItems });
-          setShownItemInfo((prev) => (prev ? { ...prev, start_time: startTime } : prev));
+          setShownItemInfo((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  start_time: startTime,
+                  end_time: startTime - prev.start_time + prev.end_time,
+                }
+              : prev,
+          );
         }}
         onEndTimeChange={(itemId, endTime) => {
           const newItems = items.map((item) =>
