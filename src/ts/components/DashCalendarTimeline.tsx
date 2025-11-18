@@ -115,6 +115,16 @@ const DashCalendarTimeline = (props: Props) => {
     setHasSelectedItem(true);
   };
 
+  const onItemRightClick = (itemId: string | number, e: React.MouseEvent) => {
+    if (props.rightClickedItem) {
+      setProps({ rightClickedItem: undefined });
+      return;
+    }
+    setProps({
+      rightClickedItem: items.find((item) => item.id === itemId),
+    });
+  };
+
   const onItemClick = (itemId: string | number, e: React.MouseEvent, time: number) => {
     // Only respond to left clicks
     if (e.button !== 0) {
@@ -137,7 +147,7 @@ const DashCalendarTimeline = (props: Props) => {
 
   const onItemDeselect = () => {
     setShownItemInfo(undefined);
-    setProps({ clickedItem: undefined, selectedItemInput: undefined });
+    setProps({ clickedItem: undefined, selectedItemInput: undefined, rightClickedItem: undefined });
     setHasSelectedItem(false);
   };
 
@@ -353,6 +363,7 @@ const DashCalendarTimeline = (props: Props) => {
         onItemMove={onItemMove}
         onItemSelect={onItemSelect}
         onItemClick={onItemClick}
+        onItemContextMenu={onItemRightClick}
         onItemDeselect={onItemDeselect}
         onItemResize={onItemResize}
         onItemDrag={() => {

@@ -91,6 +91,7 @@ export type Props = {
   /** The item that was clicked, if any. */
   clickedItem?: CalendarItem;
   selectedItemInput?: Record<string, any>;
+  rightClickedItem?: CalendarItem;
   rightClickedEvent?: RightClickEvent;
   /** SKU number of the item that was changed for the selected item */
   skuChanged?: number;
