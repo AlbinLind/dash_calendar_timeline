@@ -216,6 +216,63 @@ class DashCalendarTimeline(Component):
         - option (string; required):
             The option that was clicked, defined in the context menu.
 
+    - rightClickedItem (dict; optional)
+
+        `rightClickedItem` is a dict with keys:
+
+        - id (string | number; required)
+
+        - group (string | number; required)
+
+        - title (string; required)
+
+        - start_time (number; required):
+            Unix timestamp in milliseconds.
+
+        - end_time (number; required):
+            Unix timestamp in milliseconds.
+
+        - canMove (boolean; optional):
+            Can the item be moved.
+
+        - canResize (optional):
+            Can the item be resized at all, and if so, can all or only one
+            edge be resized?  You cannot disable resizing. This is becuase
+            dash does not generate literal unions with primitive types
+            well. See https://github.com/plotly/dash/issues/3017 \"both\":
+            can be resized at both edges \"left\": can only be resized at
+            the left edge \"right\": can only be resized at the right
+            edge.
+
+        - canChangeGroup (boolean; optional):
+            Can the item be moved to a different group?.
+
+        - itemProps (dict; optional)
+
+            `itemProps` is a dict with keys:
+
+            - className (string; optional)
+
+            - style (dict with strings as keys and values of type boolean | number | string | dict | list; optional):
+                Dict with CSS styles to apply to the item.
+
+        - hoverInfo (string; optional):
+            Hover information for the item, can be html to show.
+
+        - sku (number; optional):
+            SKU number for the item.
+
+        - is_fixed (boolean; optional):
+            Is the item fixed in position.
+
+        - legend (string; optional)
+
+        - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
+            If you want some input fields to be shown for the item, you
+            can specify them here.  When the input field changes it will
+            update the `selectedItemInput` prop with the new values. Which
+            can be used in a callback to update the item data.
+
     - selectedItemInput (dict with strings as keys and values of type boolean | number | string | dict | list; optional)
 
     - skuChanged (number; optional):
@@ -323,6 +380,43 @@ class DashCalendarTimeline(Component):
         },
     )
 
+    RightClickedItemItemProps = TypedDict(
+        "RightClickedItemItemProps",
+        {
+            "className": NotRequired[str],
+            "style": NotRequired[
+                typing.Dict[typing.Union[str, float, int], typing.Any]
+            ],
+        },
+    )
+
+    RightClickedItem = TypedDict(
+        "RightClickedItem",
+        {
+            "id": typing.Union[str, NumberType],
+            "group": typing.Union[str, NumberType],
+            "title": str,
+            "start_time": NumberType,
+            "end_time": NumberType,
+            "canMove": NotRequired[bool],
+            "canResize": NotRequired[
+                typing.Union[Literal["left"], Literal["right"], Literal["both"]]
+            ],
+            "canChangeGroup": NotRequired[bool],
+            "itemProps": NotRequired["RightClickedItemItemProps"],
+            "hoverInfo": NotRequired[str],
+            "sku": NotRequired[NumberType],
+            "is_fixed": NotRequired[bool],
+            "legend": NotRequired[str],
+            "inputs": NotRequired[
+                typing.Dict[
+                    typing.Union[str, float, int],
+                    typing.Dict[typing.Union[str, float, int], typing.Any],
+                ]
+            ],
+        },
+    )
+
     RightClickedEvent = TypedDict(
         "RightClickedEvent",
         {"time": NumberType, "group_id": typing.Union[str, NumberType], "option": str},
@@ -362,6 +456,7 @@ class DashCalendarTimeline(Component):
         selectedItemInput: typing.Optional[
             typing.Dict[typing.Union[str, float, int], typing.Any]
         ] = None,
+        rightClickedItem: typing.Optional["RightClickedItem"] = None,
         rightClickedEvent: typing.Optional["RightClickedEvent"] = None,
         skuChanged: typing.Optional[NumberType] = None,
         isFixedChanged: typing.Optional[bool] = None,
@@ -389,6 +484,7 @@ class DashCalendarTimeline(Component):
             "max_zoom",
             "min_zoom",
             "rightClickedEvent",
+            "rightClickedItem",
             "selectedItemInput",
             "skuChanged",
             "top_left_sidebar_content",
@@ -418,6 +514,7 @@ class DashCalendarTimeline(Component):
             "max_zoom",
             "min_zoom",
             "rightClickedEvent",
+            "rightClickedItem",
             "selectedItemInput",
             "skuChanged",
             "top_left_sidebar_content",
