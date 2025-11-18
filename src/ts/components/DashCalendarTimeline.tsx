@@ -294,7 +294,6 @@ const DashCalendarTimeline = (props: Props) => {
       if (!raw || props.groups.length === 0) {
         return;
       }
-      console.log(event);
 
       const payload = JSON.parse(raw);
       const rect = canvas.getBoundingClientRect();
