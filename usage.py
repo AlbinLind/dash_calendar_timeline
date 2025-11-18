@@ -171,5 +171,15 @@ def log_item_changes(sku_changed, is_fixed_changed):
     return dash.no_update
 
 
+@app.callback(
+    dash.Output("reset-time-button", "n_clicks", allow_duplicate=True),
+    dash.Input("component", "rightClickedItem"),
+    prevent_initial_call=True,
+)
+def log_right_clicked_item(right_clicked_item):
+    print("Right clicked item:", right_clicked_item)
+    return dash.no_update
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=8124)
