@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Timeline, { TimelineHeaders, DateHeader, SidebarHeader } from "react-calendar-timeline";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import "react-calendar-timeline/dist/style.css";
 import "../styles/selected-item.css";
 import "../styles/base.css";
@@ -18,9 +20,12 @@ import "dayjs/locale/sv";
 
 // Enable week of year plugin for dayjs
 dayjs.extend(weekOfYear);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Configure dayjs to start weeks on Monday (1) instead of Sunday (0)
 dayjs.Ls.en.weekStart = 1;
+dayjs.tz.setDefault("UTC");
 
 function transformItems(items: CalendarItem[]): CalendarItem[] {
   return items.map((item) => ({
