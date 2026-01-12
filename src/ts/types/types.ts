@@ -30,7 +30,7 @@ export type CalendarItem = {
   /** Is the item fixed in position */
   is_fixed?: boolean;
   legend?: string;
-  recurring_item?: string;
+  recurring_pattern?: string;
   /** If you want some input fields to be shown for the item, you can specify them here.
    *
    * When the input field changes it will update the `selectedItemInput` prop with the new values.

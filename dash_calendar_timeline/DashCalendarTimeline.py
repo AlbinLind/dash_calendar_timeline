@@ -79,7 +79,7 @@ Keyword arguments:
 
     - legend (string; optional)
 
-    - recurring_item (string; optional)
+    - recurring_pattern (string; optional)
 
     - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
         If you want some input fields to be shown for the item, you
@@ -188,7 +188,7 @@ Keyword arguments:
 
     - legend (string; optional)
 
-    - recurring_item (string; optional)
+    - recurring_pattern (string; optional)
 
     - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
         If you want some input fields to be shown for the item, you
@@ -273,7 +273,7 @@ Keyword arguments:
 
     - legend (string; optional)
 
-    - recurring_item (string; optional)
+    - recurring_pattern (string; optional)
 
     - inputs (dict with strings as keys and values of type dict with strings as keys and values of type boolean | number | string | dict | list; optional):
         If you want some input fields to be shown for the item, you
@@ -326,7 +326,7 @@ Keyword arguments:
             "sku": NotRequired[NumberType],
             "is_fixed": NotRequired[bool],
             "legend": NotRequired[str],
-            "recurring_item": NotRequired[str],
+            "recurring_pattern": NotRequired[str],
             "inputs": NotRequired[typing.Dict[typing.Union[str, float, int], typing.Dict[typing.Union[str, float, int], typing.Any]]]
         }
     )
@@ -366,7 +366,7 @@ Keyword arguments:
             "sku": NotRequired[NumberType],
             "is_fixed": NotRequired[bool],
             "legend": NotRequired[str],
-            "recurring_item": NotRequired[str],
+            "recurring_pattern": NotRequired[str],
             "inputs": NotRequired[typing.Dict[typing.Union[str, float, int], typing.Dict[typing.Union[str, float, int], typing.Any]]]
         }
     )
@@ -395,7 +395,7 @@ Keyword arguments:
             "sku": NotRequired[NumberType],
             "is_fixed": NotRequired[bool],
             "legend": NotRequired[str],
-            "recurring_item": NotRequired[str],
+            "recurring_pattern": NotRequired[str],
             "inputs": NotRequired[typing.Dict[typing.Union[str, float, int], typing.Dict[typing.Union[str, float, int], typing.Any]]]
         }
     )

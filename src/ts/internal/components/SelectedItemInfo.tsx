@@ -15,13 +15,13 @@ export function SelectedItemInfo({
   const [sku, setSku] = useState<number | string>(item?.sku || "");
   const [isFixed, setIsFixed] = useState<boolean>(item?.is_fixed || false);
   const [recurrencePattern, setRecurrencePattern] = useState<string>(
-    item?.recurring_item || "none",
+    item?.recurring_pattern || "none",
   );
 
   useEffect(() => {
     setSku(item?.sku || "");
     setIsFixed(item?.is_fixed || false);
-    setRecurrencePattern(item?.recurring_item || "none");
+    setRecurrencePattern(item?.recurring_pattern || "none");
   }, [item]);
 
   if (item === undefined) {
@@ -41,7 +41,7 @@ export function SelectedItemInfo({
       className="selected-item-info"
     >
       <div className="selected-item-info-inputs">
-        {item.recurring_item ? (
+        {item.recurring_pattern ? (
           <div className="selected-item-info-recurring">
             <div>
               <button type="button" onClick={() => onDelete(item.id)}>
