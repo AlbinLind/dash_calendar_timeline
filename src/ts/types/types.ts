@@ -30,6 +30,7 @@ export type CalendarItem = {
   /** Is the item fixed in position */
   is_fixed?: boolean;
   legend?: string;
+  recurring_item?: string;
   /** If you want some input fields to be shown for the item, you can specify them here.
    *
    * When the input field changes it will update the `selectedItemInput` prop with the new values.
@@ -102,6 +103,7 @@ export type Props = {
     time: number;
     groupId: string | number;
   };
+  recurringItemChanged?: string;
 } & DashComponentProps;
 
 export type ItemPropsType = {

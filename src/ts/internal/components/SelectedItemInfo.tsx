@@ -14,10 +14,14 @@ export function SelectedItemInfo({
 }: SelectedItemInfoProps) {
   const [sku, setSku] = useState<number | string>(item?.sku || "");
   const [isFixed, setIsFixed] = useState<boolean>(item?.is_fixed || false);
+  const [recurrencePattern, setRecurrencePattern] = useState<string>(
+    item?.recurring_item || "none",
+  );
 
   useEffect(() => {
     setSku(item?.sku || "");
     setIsFixed(item?.is_fixed || false);
+    setRecurrencePattern(item?.recurring_item || "none");
   }, [item]);
 
   if (item === undefined) {
@@ -37,49 +41,78 @@ export function SelectedItemInfo({
       className="selected-item-info"
     >
       <div className="selected-item-info-inputs">
-        <button type="button" onClick={() => onDelete(item.id)}>
-          🗑
-        </button>
-        <div>
-          <label htmlFor="is-fixed-check">Is Fixed</label>
-          <input
-            type="checkbox"
-            name="Is Fixed"
-            id="is-fixed-check"
-            checked={isFixed}
-            onChange={(e) => {
-              setIsFixed(e.target.checked);
-              setProps({
-                isFixedChanged: e.target.checked,
-              });
-              onItemFix(item.id, e.target.checked);
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="sku-input">SKU</label>
-          <input
-            type="number"
-            name="SKU"
-            id="sku-input"
-            min={0}
-            value={sku}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setSku("");
-                return;
-              }
-              if (Number(e.target.value) < 0 || isNaN(Number(e.target.value))) {
-                return;
-              }
-              setSku(Number(e.target.value));
-              setProps({
-                skuChanged: Number(e.target.value),
-              });
-              onSkuChange(item.id, Number(e.target.value));
-            }}
-          />
-        </div>
+        {item.recurring_item ? (
+          <div className="selected-item-info-recurring">
+            <div>
+              <button type="button" onClick={() => onDelete(item.id)}>
+                🗑
+              </button>
+              <div>
+                <label htmlFor="recurrence-pattern">Recurrence Pattern</label>
+                <select
+                  id="recurrence-pattern"
+                  value={recurrencePattern}
+                  onChange={(e) => {
+                    setRecurrencePattern(e.target.value);
+                    setProps({
+                      recurringItemChanged: e.target.value,
+                    });
+                  }}
+                >
+                  <option value="none">None</option>
+                  <option value="daily">Daily</option>
+                  <option value="weekly">Weekly</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="selected-item-info-regular">
+            <button type="button" onClick={() => onDelete(item.id)}>
+              🗑
+            </button>
+            <div>
+              <label htmlFor="is-fixed-check">Is Fixed</label>
+              <input
+                type="checkbox"
+                name="Is Fixed"
+                id="is-fixed-check"
+                checked={isFixed}
+                onChange={(e) => {
+                  setIsFixed(e.target.checked);
+                  setProps({
+                    isFixedChanged: e.target.checked,
+                  });
+                  onItemFix(item.id, e.target.checked);
+                }}
+              />
+            </div>
+            <div>
+              <label htmlFor="sku-input">SKU</label>
+              <input
+                type="number"
+                name="SKU"
+                id="sku-input"
+                min={0}
+                value={sku}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setSku("");
+                    return;
+                  }
+                  if (Number(e.target.value) < 0 || isNaN(Number(e.target.value))) {
+                    return;
+                  }
+                  setSku(Number(e.target.value));
+                  setProps({
+                    skuChanged: Number(e.target.value),
+                  });
+                  onSkuChange(item.id, Number(e.target.value));
+                }}
+              />
+            </div>
+          </div>
+        )}
         <div>
           <label htmlFor="start-time-input">Start Time</label>
           <input
