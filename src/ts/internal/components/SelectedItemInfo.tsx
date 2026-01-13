@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import { SelectedItemInfoProps } from "types/types";
 
@@ -23,6 +23,14 @@ export function SelectedItemInfo({
     setIsFixed(item?.is_fixed || false);
     setRecurrencePattern(item?.recurring_pattern || "none");
   }, [item]);
+
+  // Debounced setProps to avoid blocking the UI
+  const debouncedSetProps = useCallback(
+    (props: Record<string, any>) => {
+      setTimeout(() => setProps(props), 0);
+    },
+    [setProps]
+  );
 
   if (item === undefined) {
     return <></>;
@@ -54,7 +62,7 @@ export function SelectedItemInfo({
                   value={recurrencePattern}
                   onChange={(e) => {
                     setRecurrencePattern(e.target.value);
-                    setProps({
+                    debouncedSetProps({
                       recurringItemChanged: e.target.value,
                     });
                   }}
@@ -80,7 +88,7 @@ export function SelectedItemInfo({
                 checked={isFixed}
                 onChange={(e) => {
                   setIsFixed(e.target.checked);
-                  setProps({
+                  debouncedSetProps({
                     isFixedChanged: e.target.checked,
                   });
                   onItemFix(item.id, e.target.checked);
@@ -104,7 +112,7 @@ export function SelectedItemInfo({
                     return;
                   }
                   setSku(Number(e.target.value));
-                  setProps({
+                  debouncedSetProps({
                     skuChanged: Number(e.target.value),
                   });
                   onSkuChange(item.id, Number(e.target.value));
@@ -123,7 +131,7 @@ export function SelectedItemInfo({
               .slice(0, 16)}
             onChange={(e) => {
               const localTime = new Date(e.target.value).getTime();
-              setProps({
+              debouncedSetProps({
                 startTimeChanged: localTime,
               });
               onStartTimeChange && onStartTimeChange(item.id, localTime);
@@ -141,7 +149,7 @@ export function SelectedItemInfo({
               .slice(0, 16)}
             onChange={(e) => {
               const localTime = new Date(e.target.value).getTime();
-              setProps({
+              debouncedSetProps({
                 endTimeChanged: localTime,
               });
               onEndTimeChange && onEndTimeChange(item.id, localTime);
@@ -163,7 +171,7 @@ export function SelectedItemInfo({
                     input.onChange(e);
                   }
                   const value = e.target.type === "checkbox" ? e.target.checked : e.target.value;
-                  setProps({
+                  debouncedSetProps({
                     selectedItemInput: {
                       ...selectedItemProps,
                       [key]: value,
