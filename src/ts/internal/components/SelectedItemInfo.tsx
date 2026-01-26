@@ -62,7 +62,7 @@ export function SelectedItemInfo({
           </div>
         )}
         <div>
-          <label htmlFor="sku-input">SKU</label>
+          <label htmlFor="sku-input">{skuAlternativeName || "SKU"}</label>
           <input
             type="number"
             name={skuAlternativeName || "SKU"}
