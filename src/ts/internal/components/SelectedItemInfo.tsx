@@ -11,6 +11,7 @@ export function SelectedItemInfo({
   onSkuChange,
   onStartTimeChange,
   onEndTimeChange,
+  skuAlternativeName,
 }: SelectedItemInfoProps) {
   const [sku, setSku] = useState<number | string>(item?.sku || "");
   const [isFixed, setIsFixed] = useState<boolean>(item?.is_fixed || false);
@@ -40,27 +41,28 @@ export function SelectedItemInfo({
         <button type="button" onClick={() => onDelete(item.id)}>
           🗑
         </button>
-        <div>
-          <label htmlFor="is-fixed-check">Is Fixed</label>
-          <input
-            type="checkbox"
-            name="Is Fixed"
-            id="is-fixed-check"
-            checked={isFixed}
-            onChange={(e) => {
-              setIsFixed(e.target.checked);
-              setProps({
-                isFixedChanged: e.target.checked,
-              });
-              onItemFix(item.id, e.target.checked);
-            }}
-          />
-        </div>
+        {item.hide_is_fixed ? (<div></div>) : (
+          <div>
+            <label htmlFor="is-fixed-check">Is Fixed</label>
+            <input
+              type="checkbox"
+              name="Is Fixed"
+              id="is-fixed-check"
+              checked={isFixed}
+              onChange={(e) => {
+                setIsFixed(e.target.checked);
+                setProps({
+                  isFixedChanged: e.target.checked,
+                });
+                onItemFix(item.id, e.target.checked);
+              }}
+            />
+          </div>)}
         <div>
           <label htmlFor="sku-input">SKU</label>
           <input
             type="number"
-            name="SKU"
+            name={skuAlternativeName || "SKU"}
             id="sku-input"
             min={0}
             value={sku}
