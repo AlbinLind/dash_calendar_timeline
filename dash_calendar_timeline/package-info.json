@@ -6,10 +6,10 @@
   "scripts": {
     "build:js::dev": "webpack --mode development",
     "build:js": "webpack",
-    "build:backends": "dash-generate-components ./src/ts/components dash_calendar_timeline -p package-info.json  --ignore \\.test\\.",
+    "build:backends": "uv run dash-generate-components ./src/ts/components dash_calendar_timeline -p package-info.json  --ignore \\.test\\.",
     "build": "npm run build:js && npm run build:backends",
     "watch": "npm run build:js::dev -- --watch",
-    "dist": "python -m build --sdist --wheel --outdir dist/",
+    "dist": "uv run python -m build --sdist --wheel --outdir dist/",
     "format": "prettier --write src --ignore-path=.prettierignore"
   },
   "devDependencies": {
