@@ -41,7 +41,9 @@ export function SelectedItemInfo({
         <button type="button" onClick={() => onDelete(item.id)}>
           🗑
         </button>
-        {item.hide_is_fixed ? (<div></div>) : (
+        {item.hide_is_fixed ? (
+          <div></div>
+        ) : (
           <div>
             <label htmlFor="is-fixed-check">Is Fixed</label>
             <input
@@ -57,7 +59,8 @@ export function SelectedItemInfo({
                 onItemFix(item.id, e.target.checked);
               }}
             />
-          </div>)}
+          </div>
+        )}
         <div>
           <label htmlFor="sku-input">SKU</label>
           <input
