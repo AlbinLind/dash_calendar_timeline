@@ -51,6 +51,7 @@ const DashCalendarTimeline = (props: Props) => {
   const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
   const [showContextMenu, setShowContextMenu] = useState<rightClickProps | undefined>(undefined);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const timeChangeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     setItems(transformItems(props.items));
@@ -59,17 +60,20 @@ const DashCalendarTimeline = (props: Props) => {
   useEffect(() => {
     if (props.visible_time_start !== undefined) {
       setVisibleTimeStart(props.visible_time_start);
-      setProps({
-        visible_time_start: undefined,
-      });
     }
     if (props.visible_time_end !== undefined) {
       setVisibleTimeEnd(props.visible_time_end);
-      setProps({
-        visible_time_end: undefined,
-      });
     }
   }, [props.visible_time_start, props.visible_time_end]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeChangeTimeoutRef.current) {
+        clearTimeout(timeChangeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // HACK: we can't set defaultTimeStart to 0, so we have to set it to 1.
   const minStartTime = Math.max(Math.min(...items.map((item) => item.start_time)), 1);
@@ -228,6 +232,19 @@ const DashCalendarTimeline = (props: Props) => {
     setVisibleTimeStart(visibleTimeStart);
     setVisibleTimeEnd(visibleTimeEnd);
     updateScrollCanvas(visibleTimeStart, visibleTimeEnd);
+
+    // Clear any existing timeout
+    if (timeChangeTimeoutRef.current) {
+      clearTimeout(timeChangeTimeoutRef.current);
+    }
+
+    // Set a new timeout to update props only after user stops interacting (debounce)
+    timeChangeTimeoutRef.current = setTimeout(() => {
+      setProps({
+        visible_time_start: visibleTimeStart,
+        visible_time_end: visibleTimeEnd,
+      });
+    }, 300); // Wait 300ms after the last change before updating props
   };
 
   /**
