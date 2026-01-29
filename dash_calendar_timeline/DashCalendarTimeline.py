@@ -74,6 +74,9 @@ class DashCalendarTimeline(Component):
         - sku (number; optional):
             SKU number for the item.
 
+        - hide_is_fixed (boolean; optional):
+            Hide the is fixed checkbox in the selected item info.
+
         - is_fixed (boolean; optional):
             Is the item fixed in position.
 
@@ -181,6 +184,9 @@ class DashCalendarTimeline(Component):
         - sku (number; optional):
             SKU number for the item.
 
+        - hide_is_fixed (boolean; optional):
+            Hide the is fixed checkbox in the selected item info.
+
         - is_fixed (boolean; optional):
             Is the item fixed in position.
 
@@ -262,6 +268,9 @@ class DashCalendarTimeline(Component):
         - sku (number; optional):
             SKU number for the item.
 
+        - hide_is_fixed (boolean; optional):
+            Hide the is fixed checkbox in the selected item info.
+
         - is_fixed (boolean; optional):
             Is the item fixed in position.
 
@@ -277,6 +286,9 @@ class DashCalendarTimeline(Component):
 
     - skuChanged (number; optional):
         SKU number of the item that was changed for the selected item.
+
+    - sku_alternative_name (string; optional):
+        Change the title of the sku entry.
 
     - top_left_sidebar_content (a list of or a singular dash component, string or number; optional)
 
@@ -321,6 +333,7 @@ class DashCalendarTimeline(Component):
             "itemProps": NotRequired["ItemsItemProps"],
             "hoverInfo": NotRequired[str],
             "sku": NotRequired[NumberType],
+            "hide_is_fixed": NotRequired[bool],
             "is_fixed": NotRequired[bool],
             "legend": NotRequired[str],
             "inputs": NotRequired[
@@ -369,6 +382,7 @@ class DashCalendarTimeline(Component):
             "itemProps": NotRequired["ClickedItemItemProps"],
             "hoverInfo": NotRequired[str],
             "sku": NotRequired[NumberType],
+            "hide_is_fixed": NotRequired[bool],
             "is_fixed": NotRequired[bool],
             "legend": NotRequired[str],
             "inputs": NotRequired[
@@ -406,6 +420,7 @@ class DashCalendarTimeline(Component):
             "itemProps": NotRequired["RightClickedItemItemProps"],
             "hoverInfo": NotRequired[str],
             "sku": NotRequired[NumberType],
+            "hide_is_fixed": NotRequired[bool],
             "is_fixed": NotRequired[bool],
             "legend": NotRequired[str],
             "inputs": NotRequired[
@@ -452,6 +467,7 @@ class DashCalendarTimeline(Component):
         top_left_sidebar_content: typing.Optional[ComponentType] = None,
         locale: typing.Optional[str] = None,
         use_resize_handle: typing.Optional[bool] = None,
+        sku_alternative_name: typing.Optional[str] = None,
         clickedItem: typing.Optional["ClickedItem"] = None,
         selectedItemInput: typing.Optional[
             typing.Dict[typing.Union[str, float, int], typing.Any]
@@ -487,6 +503,7 @@ class DashCalendarTimeline(Component):
             "rightClickedItem",
             "selectedItemInput",
             "skuChanged",
+            "sku_alternative_name",
             "top_left_sidebar_content",
             "use_resize_handle",
             "visible_time_end",
@@ -517,6 +534,7 @@ class DashCalendarTimeline(Component):
             "rightClickedItem",
             "selectedItemInput",
             "skuChanged",
+            "sku_alternative_name",
             "top_left_sidebar_content",
             "use_resize_handle",
             "visible_time_end",

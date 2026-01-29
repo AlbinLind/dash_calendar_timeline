@@ -443,6 +443,7 @@ const DashCalendarTimeline = (props: Props) => {
       </Timeline>
       {showContextMenu && <RightClickOutsideHandler {...showContextMenu} />}
       <SelectedItemInfo
+        skuAlternativeName={props.sku_alternative_name}
         item={shownItemInfo}
         setProps={setProps}
         selectedItemProps={props.selectedItemInput}

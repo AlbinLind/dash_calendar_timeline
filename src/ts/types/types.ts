@@ -27,6 +27,8 @@ export type CalendarItem = {
   hoverInfo?: string;
   /** SKU number for the item */
   sku?: number;
+  /** Hide the is fixed checkbox in the selected item info */
+  hide_is_fixed?: boolean;
   /** Is the item fixed in position */
   is_fixed?: boolean;
   legend?: string;
@@ -87,6 +89,8 @@ export type Props = {
 
   /** Should you only be able to resize from the ends? Defaults to true */
   use_resize_handle?: boolean;
+  /** Change the title of the sku entry. */
+  sku_alternative_name?: string;
   // ========== Callbacks ==========
   /** The item that was clicked, if any. */
   clickedItem?: CalendarItem;
@@ -126,6 +130,7 @@ export type SelectedItemInfoProps = {
   onSkuChange: (itemId: string | number, sku: number) => void;
   onStartTimeChange: (itemId: string | number, startTime: number) => void;
   onEndTimeChange: (itemId: string | number, endTime: number) => void;
+  skuAlternativeName?: string;
 };
 export type rightClickProps = {
   contextItems: string[];
