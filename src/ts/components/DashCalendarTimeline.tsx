@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Timeline, { TimelineHeaders, DateHeader, SidebarHeader } from "react-calendar-timeline";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
@@ -68,7 +68,7 @@ const DashCalendarTimeline = (props: Props) => {
     }
   }, [props.visible_time_start, props.visible_time_end]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
@@ -88,6 +88,9 @@ const DashCalendarTimeline = (props: Props) => {
 
       previousContainerWidthRef.current = roundedWidth;
 
+      // Re render the timeline if we go from 0 width to another
+      // width. Otherwise, we expect that the timeline can handle the width change
+      // without the full re-render.
       if (previousWidth === 0 && roundedWidth > 0) {
         setTimelineRenderKey((prev) => prev + 1);
       }
@@ -391,6 +394,9 @@ const DashCalendarTimeline = (props: Props) => {
 
       const payload = JSON.parse(raw);
       const rect = canvas.getBoundingClientRect();
+      if (rect.width <= 0) {
+        return;
+      }
       const lineHeight = props.line_height ?? 60;
 
       const offsetX = event.clientX - rect.left;
@@ -424,6 +430,7 @@ const DashCalendarTimeline = (props: Props) => {
     visibleTimeEnd,
     defaultTimeStart,
     defaultTimeEnd,
+    timelineRenderKey,
     setProps,
   ]);
 
