@@ -50,8 +50,10 @@ const DashCalendarTimeline = (props: Props) => {
   );
   const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
   const [showContextMenu, setShowContextMenu] = useState<rightClickProps | undefined>(undefined);
+  const [timelineRenderKey, setTimelineRenderKey] = useState<number>(0);
   const timelineRef = useRef<HTMLDivElement | null>(null);
   const timeChangeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const previousContainerWidthRef = useRef<number | null>(null);
 
   useEffect(() => {
     setItems(transformItems(props.items));
@@ -65,6 +67,71 @@ const DashCalendarTimeline = (props: Props) => {
       setVisibleTimeEnd(props.visible_time_end);
     }
   }, [props.visible_time_start, props.visible_time_end]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const container = timelineRef.current;
+    if (!container) {
+      return;
+    }
+
+    const updateContainerWidth = (width: number) => {
+      const roundedWidth = Math.round(width);
+      const previousWidth = previousContainerWidthRef.current;
+
+      if (previousWidth === roundedWidth) {
+        return;
+      }
+
+      previousContainerWidthRef.current = roundedWidth;
+
+      if (previousWidth === 0 && roundedWidth > 0) {
+        setTimelineRenderKey((prev) => prev + 1);
+      }
+    };
+
+    const measureContainerWidth = () => {
+      updateContainerWidth(container.getBoundingClientRect().width);
+    };
+
+    measureContainerWidth();
+
+    if (typeof ResizeObserver !== "undefined") {
+      const observer = new ResizeObserver((entries) => {
+        const [entry] = entries;
+        if (!entry) {
+          return;
+        }
+
+        const borderBoxSize = (entry as any).borderBoxSize;
+
+        if (Array.isArray(borderBoxSize) && borderBoxSize.length > 0) {
+          updateContainerWidth(borderBoxSize[0].inlineSize);
+          return;
+        }
+
+        if (borderBoxSize && typeof borderBoxSize.inlineSize === "number") {
+          updateContainerWidth(borderBoxSize.inlineSize);
+          return;
+        }
+
+        updateContainerWidth(entry.contentRect.width);
+      });
+
+      observer.observe(container);
+      return () => {
+        observer.disconnect();
+      };
+    }
+
+    window.addEventListener("resize", measureContainerWidth);
+    return () => {
+      window.removeEventListener("resize", measureContainerWidth);
+    };
+  }, []);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -338,7 +405,7 @@ const DashCalendarTimeline = (props: Props) => {
       setProps({
         externalDrop: {
           data: payload,
-          group_id: props.groups[groupIdx].id,
+          group_id,
           time: dropTime,
         },
       });
@@ -363,6 +430,7 @@ const DashCalendarTimeline = (props: Props) => {
   return (
     <div id={id} ref={timelineRef}>
       <Timeline
+        key={timelineRenderKey}
         groups={props.groups}
         items={items.filter((item) =>
           props.deselected_legend_items
@@ -376,7 +444,7 @@ const DashCalendarTimeline = (props: Props) => {
         maxZoom={props.max_zoom}
         lineHeight={props.line_height}
         itemHeightRatio={props.item_height_ratio}
-        useResizeHandle={props.use_resize_handle ? false : true}
+        useResizeHandle={props.use_resize_handle ?? true}
         onItemMove={onItemMove}
         onItemSelect={onItemSelect}
         onItemClick={onItemClick}

@@ -104,7 +104,7 @@ export type Props = {
   externalDrop?: {
     data: any;
     time: number;
-    groupId: string | number;
+    group_id: string | number;
   };
 } & DashComponentProps;
 

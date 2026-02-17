@@ -8,6 +8,14 @@ Project Description
 pip install dash_calendar_timeline
 ```
 
+## Resize behavior
+
+The timeline package uses `ResizeObserver` (with a `window.resize` fallback for legacy environments).
+
+When a timeline is mounted inside a hidden container (for example a parent with `display: none`) and then shown again, this wrapper detects the container width transition from hidden (`0`) to visible and re-initializes the timeline once.
+
+This means you should not need to manually dispatch a `window.resize` event after showing the component.
+
 ## Development
 ### Getting Started
 

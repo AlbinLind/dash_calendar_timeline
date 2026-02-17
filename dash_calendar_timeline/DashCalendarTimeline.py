@@ -117,7 +117,7 @@ class DashCalendarTimeline(Component):
 
         - time (number; required)
 
-        - groupId (string | number; required)
+        - group_id (string | number; required)
 
     - groups (list of dicts; required)
 
@@ -442,7 +442,7 @@ class DashCalendarTimeline(Component):
         {
             "data": typing.Any,
             "time": NumberType,
-            "groupId": typing.Union[str, NumberType],
+            "group_id": typing.Union[str, NumberType],
         },
     )
 
