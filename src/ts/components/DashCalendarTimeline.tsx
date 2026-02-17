@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Timeline, { TimelineHeaders, DateHeader, SidebarHeader } from "react-calendar-timeline";
 import dayjs from "dayjs";
 import weekOfYear from "dayjs/plugin/weekOfYear";
@@ -50,10 +50,8 @@ const DashCalendarTimeline = (props: Props) => {
   );
   const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
   const [showContextMenu, setShowContextMenu] = useState<rightClickProps | undefined>(undefined);
-  const [timelineRenderKey, setTimelineRenderKey] = useState<number>(0);
   const timelineRef = useRef<HTMLDivElement | null>(null);
   const timeChangeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const previousContainerWidthRef = useRef<number | null>(null);
 
   useEffect(() => {
     setItems(transformItems(props.items));
@@ -67,74 +65,6 @@ const DashCalendarTimeline = (props: Props) => {
       setVisibleTimeEnd(props.visible_time_end);
     }
   }, [props.visible_time_start, props.visible_time_end]);
-
-  useLayoutEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const container = timelineRef.current;
-    if (!container) {
-      return;
-    }
-
-    const updateContainerWidth = (width: number) => {
-      const roundedWidth = Math.round(width);
-      const previousWidth = previousContainerWidthRef.current;
-
-      if (previousWidth === roundedWidth) {
-        return;
-      }
-
-      previousContainerWidthRef.current = roundedWidth;
-
-      // Re render the timeline if we go from 0 width to another
-      // width. Otherwise, we expect that the timeline can handle the width change
-      // without the full re-render.
-      if (previousWidth === 0 && roundedWidth > 0) {
-        setTimelineRenderKey((prev) => prev + 1);
-      }
-    };
-
-    const measureContainerWidth = () => {
-      updateContainerWidth(container.getBoundingClientRect().width);
-    };
-
-    measureContainerWidth();
-
-    if (typeof ResizeObserver !== "undefined") {
-      const observer = new ResizeObserver((entries) => {
-        const [entry] = entries;
-        if (!entry) {
-          return;
-        }
-
-        const borderBoxSize = (entry as any).borderBoxSize;
-
-        if (Array.isArray(borderBoxSize) && borderBoxSize.length > 0) {
-          updateContainerWidth(borderBoxSize[0].inlineSize);
-          return;
-        }
-
-        if (borderBoxSize && typeof borderBoxSize.inlineSize === "number") {
-          updateContainerWidth(borderBoxSize.inlineSize);
-          return;
-        }
-
-        updateContainerWidth(entry.contentRect.width);
-      });
-
-      observer.observe(container);
-      return () => {
-        observer.disconnect();
-      };
-    }
-
-    window.addEventListener("resize", measureContainerWidth);
-    return () => {
-      window.removeEventListener("resize", measureContainerWidth);
-    };
-  }, []);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -370,74 +300,96 @@ const DashCalendarTimeline = (props: Props) => {
     );
   };
 
-  useEffect(() => {
+  const onExternalDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     if (!props.enable_external_drop) {
       return;
     }
 
     const canvas = timelineRef.current?.querySelector<HTMLDivElement>(".rct-scroll");
-    if (!canvas || !setProps) {
+    if (!canvas) {
       return;
     }
 
-    const handleDragOver = (event: DragEvent) => {
-      event.preventDefault();
-      event.dataTransfer && (event.dataTransfer.dropEffect = "copy");
-    };
+    const rect = canvas.getBoundingClientRect();
+    const isInsideCanvas =
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom;
 
-    const handleDrop = (event: DragEvent) => {
-      event.preventDefault();
-      const raw = event.dataTransfer?.getData("application/json");
-      if (!raw || props.groups.length === 0) {
-        return;
-      }
+    if (!isInsideCanvas) {
+      return;
+    }
 
-      const payload = JSON.parse(raw);
-      const rect = canvas.getBoundingClientRect();
-      if (rect.width <= 0) {
-        return;
-      }
-      const lineHeight = props.line_height ?? 60;
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = "copy";
+    }
+  };
 
-      const offsetX = event.clientX - rect.left;
-      const offsetY = event.clientY - rect.top;
+  const onExternalDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    if (!props.enable_external_drop || props.groups.length === 0) {
+      return;
+    }
 
-      const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
-      const group_id = props.groups[groupIdx].id;
-      const start = visibleTimeStart ?? defaultTimeStart;
-      const end = visibleTimeEnd ?? defaultTimeEnd;
-      const dropTime = start + (offsetX / rect.width) * (end - start);
+    const canvas = timelineRef.current?.querySelector<HTMLDivElement>(".rct-scroll");
+    if (!canvas) {
+      return;
+    }
 
-      setProps({
-        externalDrop: {
-          data: payload,
-          group_id,
-          time: dropTime,
-        },
-      });
-    };
+    const rect = canvas.getBoundingClientRect();
+    const isInsideCanvas =
+      event.clientX >= rect.left &&
+      event.clientX <= rect.right &&
+      event.clientY >= rect.top &&
+      event.clientY <= rect.bottom;
 
-    canvas.addEventListener("dragover", handleDragOver);
-    canvas.addEventListener("drop", handleDrop);
-    return () => {
-      canvas.removeEventListener("dragover", handleDragOver);
-      canvas.removeEventListener("drop", handleDrop);
-    };
-  }, [
-    props.enable_external_drop,
-    props.groups,
-    visibleTimeStart,
-    visibleTimeEnd,
-    defaultTimeStart,
-    defaultTimeEnd,
-    timelineRenderKey,
-    setProps,
-  ]);
+    if (!isInsideCanvas || rect.width <= 0 || rect.height <= 0) {
+      return;
+    }
+
+    event.preventDefault();
+
+    const raw = event.dataTransfer?.getData("application/json");
+    if (!raw) {
+      return;
+    }
+
+    let payload: any;
+    try {
+      payload = JSON.parse(raw);
+    } catch {
+      return;
+    }
+
+    const lineHeight = props.line_height ?? 60;
+    const offsetX = event.clientX - rect.left;
+    const offsetY = event.clientY - rect.top;
+
+    const maxGroupIndex = props.groups.length - 1;
+    const groupIdx = Math.max(0, Math.min(Math.floor(offsetY / lineHeight), maxGroupIndex));
+    const group_id = props.groups[groupIdx].id;
+    const start = visibleTimeStart ?? defaultTimeStart;
+    const end = visibleTimeEnd ?? defaultTimeEnd;
+    const dropTime = start + (offsetX / rect.width) * (end - start);
+
+    setProps({
+      externalDrop: {
+        data: payload,
+        group_id,
+        time: dropTime,
+      },
+    });
+  };
 
   return (
-    <div id={id} ref={timelineRef}>
+    <div
+      id={id}
+      ref={timelineRef}
+      onDragOver={onExternalDragOver}
+      onDrop={onExternalDrop}
+    >
       <Timeline
-        key={timelineRenderKey}
         groups={props.groups}
         items={items.filter((item) =>
           props.deselected_legend_items
