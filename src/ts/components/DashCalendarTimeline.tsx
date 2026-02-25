@@ -15,6 +15,11 @@ import { CustomItemRenderer } from "../renderers/CustomItemRenderer";
 import "dayjs/locale/de";
 import "dayjs/locale/nl";
 import "dayjs/locale/sv";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 // Enable week of year plugin for dayjs
 dayjs.extend(weekOfYear);
@@ -334,7 +339,8 @@ const DashCalendarTimeline = (props: Props) => {
         return;
       }
 
-      const { top } = timelineElement.getBoundingClientRect();
+      const { top } = canvas.getBoundingClientRect();
+      console.log(timelineElement.getBoundingClientRect(), event.clientX, event.clientY);
       const x = event.clientX;
       const y = event.clientY - top;
       const { time: dropTime, groupIndex } =
