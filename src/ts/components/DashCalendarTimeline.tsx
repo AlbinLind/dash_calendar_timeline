@@ -51,6 +51,7 @@ const DashCalendarTimeline = (props: Props) => {
   const [hasSelectedItem, setHasSelectedItem] = useState<boolean>(false);
   const [showContextMenu, setShowContextMenu] = useState<rightClickProps | undefined>(undefined);
   const timelineRef = useRef<HTMLDivElement | null>(null);
+  const timelineInstanceRef = useRef<Timeline>(null);
   const timeChangeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -323,22 +324,31 @@ const DashCalendarTimeline = (props: Props) => {
       }
 
       const payload = JSON.parse(raw);
-      const rect = canvas.getBoundingClientRect();
-      const lineHeight = props.line_height ?? 60;
+      const timelineElement = timelineRef.current;
+      const timelineInstance = timelineInstanceRef.current;
+      if (
+        !timelineElement ||
+        !timelineInstance ||
+        typeof timelineInstance.calculateDropCoordinatesToTimeAndGroup !== "function"
+      ) {
+        return;
+      }
 
-      const offsetX = event.clientX - rect.left;
-      const offsetY = event.clientY - rect.top;
+      const { top } = timelineElement.getBoundingClientRect();
+      const x = event.clientX;
+      const y = event.clientY - top;
+      const { time: dropTime, groupIndex } =
+        timelineInstance.calculateDropCoordinatesToTimeAndGroup(x, y);
 
-      const groupIdx = Math.min(Math.floor(offsetY / lineHeight), props.groups.length - 1);
-      const group_id = props.groups[groupIdx].id;
-      const start = visibleTimeStart ?? defaultTimeStart;
-      const end = visibleTimeEnd ?? defaultTimeEnd;
-      const dropTime = start + (offsetX / rect.width) * (end - start);
+      const group = props.groups[groupIndex];
+      if (!group) {
+        return;
+      }
 
       setProps({
         externalDrop: {
           data: payload,
-          group_id: props.groups[groupIdx].id,
+          group_id: group.id,
           time: dropTime,
         },
       });
@@ -363,6 +373,7 @@ const DashCalendarTimeline = (props: Props) => {
   return (
     <div id={id} ref={timelineRef}>
       <Timeline
+        ref={timelineInstanceRef}
         groups={props.groups}
         items={items.filter((item) =>
           props.deselected_legend_items
