@@ -402,7 +402,7 @@ const DashCalendarTimeline = (props: Props) => {
   ]);
 
   return (
-    <div id={id} ref={timelineRef}>
+    <div id={id} ref={timelineRef} style={{ width: "100%", height: "100%", minHeight: "100px" }}>
       {containerReady && (
         <Timeline
           ref={timelineInstanceRef}
