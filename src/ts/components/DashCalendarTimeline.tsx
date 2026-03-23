@@ -403,86 +403,88 @@ const DashCalendarTimeline = (props: Props) => {
 
   return (
     <div id={id} ref={timelineRef}>
-      {containerReady && <Timeline
-        ref={timelineInstanceRef}
-        groups={props.groups}
-        items={items.filter((item) =>
-          props.deselected_legend_items
-            ? !props.deselected_legend_items.includes(item.legend || "")
-            : true,
-        )}
-        defaultTimeStart={defaultTimeStart}
-        defaultTimeEnd={defaultTimeEnd}
-        dragSnap={props.drag_snap}
-        minZoom={props.min_zoom}
-        maxZoom={props.max_zoom}
-        lineHeight={props.line_height}
-        itemHeightRatio={props.item_height_ratio}
-        useResizeHandle={props.use_resize_handle ? false : true}
-        onItemMove={onItemMove}
-        onItemSelect={onItemSelect}
-        onItemClick={onItemClick}
-        onItemContextMenu={onItemRightClick}
-        onItemDeselect={onItemDeselect}
-        onItemResize={onItemResize}
-        onItemDrag={() => {
-          setHasSelectedItem(false);
-          setShownItemInfo(undefined);
-        }}
-        itemRenderer={itemRenderer}
-        onCanvasContextMenu={onCanvasContextMenu}
-        onCanvasClick={() => {
-          setShowContextMenu(undefined);
-        }}
-        onTimeChange={onTimeChange}
-        visibleTimeStart={visibleTimeStart}
-        visibleTimeEnd={visibleTimeEnd}
-      >
-        {props.enable_week_headers &&
-          (() => {
-            const [primaryUnit, secondaryUnit] = getHeaderUnits();
+      {containerReady && (
+        <Timeline
+          ref={timelineInstanceRef}
+          groups={props.groups}
+          items={items.filter((item) =>
+            props.deselected_legend_items
+              ? !props.deselected_legend_items.includes(item.legend || "")
+              : true,
+          )}
+          defaultTimeStart={defaultTimeStart}
+          defaultTimeEnd={defaultTimeEnd}
+          dragSnap={props.drag_snap}
+          minZoom={props.min_zoom}
+          maxZoom={props.max_zoom}
+          lineHeight={props.line_height}
+          itemHeightRatio={props.item_height_ratio}
+          useResizeHandle={props.use_resize_handle ? false : true}
+          onItemMove={onItemMove}
+          onItemSelect={onItemSelect}
+          onItemClick={onItemClick}
+          onItemContextMenu={onItemRightClick}
+          onItemDeselect={onItemDeselect}
+          onItemResize={onItemResize}
+          onItemDrag={() => {
+            setHasSelectedItem(false);
+            setShownItemInfo(undefined);
+          }}
+          itemRenderer={itemRenderer}
+          onCanvasContextMenu={onCanvasContextMenu}
+          onCanvasClick={() => {
+            setShowContextMenu(undefined);
+          }}
+          onTimeChange={onTimeChange}
+          visibleTimeStart={visibleTimeStart}
+          visibleTimeEnd={visibleTimeEnd}
+        >
+          {props.enable_week_headers &&
+            (() => {
+              const [primaryUnit, secondaryUnit] = getHeaderUnits();
 
-            // Custom label formatter for week headers to show "Week X" instead of "W"
-            const weekLabelFormat = (
-              [startTime, endTime]: [any, any],
-              unit: string,
-              labelWidth: number,
-            ) => {
-              if (unit === "week") {
-                // Ensure we have a dayjs object
+              // Custom label formatter for week headers to show "Week X" instead of "W"
+              const weekLabelFormat = (
+                [startTime, endTime]: [any, any],
+                unit: string,
+                labelWidth: number,
+              ) => {
+                if (unit === "week") {
+                  // Ensure we have a dayjs object
+                  const dayjsStart = dayjs.isDayjs(startTime) ? startTime : dayjs(startTime);
+                  const weekNumber = dayjsStart.week();
+                  return `Week ${weekNumber}`;
+                }
+                // For other units, use the default formatting
                 const dayjsStart = dayjs.isDayjs(startTime) ? startTime : dayjs(startTime);
-                const weekNumber = dayjsStart.week();
-                return `Week ${weekNumber}`;
-              }
-              // For other units, use the default formatting
-              const dayjsStart = dayjs.isDayjs(startTime) ? startTime : dayjs(startTime);
-              return dayjsStart.format();
-            };
+                return dayjsStart.format();
+              };
 
-            return (
-              <TimelineHeaders>
-                <SidebarHeader>
-                  {({ getRootProps }) => {
-                    return (
-                      <div {...getRootProps()} className="sidebarHeader">
-                        {props.top_left_sidebar_content}
-                      </div>
-                    );
-                  }}
-                </SidebarHeader>
-                <DateHeader
-                  unit={primaryUnit as any}
-                  labelFormat={primaryUnit === "week" ? weekLabelFormat : undefined}
-                  intervalRenderer={primaryIntervalRenderer}
-                />
-                <DateHeader
-                  unit={secondaryUnit as any}
-                  labelFormat={secondaryUnit === "week" ? weekLabelFormat : undefined}
-                />
-              </TimelineHeaders>
-            );
-          })()}
-      </Timeline>}
+              return (
+                <TimelineHeaders>
+                  <SidebarHeader>
+                    {({ getRootProps }) => {
+                      return (
+                        <div {...getRootProps()} className="sidebarHeader">
+                          {props.top_left_sidebar_content}
+                        </div>
+                      );
+                    }}
+                  </SidebarHeader>
+                  <DateHeader
+                    unit={primaryUnit as any}
+                    labelFormat={primaryUnit === "week" ? weekLabelFormat : undefined}
+                    intervalRenderer={primaryIntervalRenderer}
+                  />
+                  <DateHeader
+                    unit={secondaryUnit as any}
+                    labelFormat={secondaryUnit === "week" ? weekLabelFormat : undefined}
+                  />
+                </TimelineHeaders>
+              );
+            })()}
+        </Timeline>
+      )}
       {showContextMenu && <RightClickOutsideHandler {...showContextMenu} />}
       <SelectedItemInfo
         skuAlternativeName={props.sku_alternative_name}
