@@ -399,6 +399,7 @@ const DashCalendarTimeline = (props: Props) => {
     defaultTimeStart,
     defaultTimeEnd,
     setProps,
+    containerReady,
   ]);
 
   return (
