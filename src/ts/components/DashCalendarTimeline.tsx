@@ -338,6 +338,7 @@ const DashCalendarTimeline = (props: Props) => {
 
     const canvas = timelineRef.current?.querySelector<HTMLDivElement>(".rct-scroll");
     if (!canvas || !setProps) {
+      console.log("Canvas element or setProps not found, cannot enable external drop");
       return;
     }
 
