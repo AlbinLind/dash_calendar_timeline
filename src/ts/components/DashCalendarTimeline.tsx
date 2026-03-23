@@ -59,6 +59,31 @@ const DashCalendarTimeline = (props: Props) => {
   const timelineInstanceRef = useRef<Timeline>(null);
   const timeChangeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const [containerReady, setContainerReady] = useState(false);
+
+  useEffect(() => {
+    if (!timelineRef.current) return;
+
+    // Initial check
+    if (timelineRef.current.clientWidth > 0) {
+      setContainerReady(true);
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect.width > 0) {
+          setContainerReady(true);
+        } else {
+          setContainerReady(false);
+        }
+      }
+    });
+
+    observer.observe(timelineRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     setItems(transformItems(props.items));
   }, [props.items]);
@@ -378,7 +403,7 @@ const DashCalendarTimeline = (props: Props) => {
 
   return (
     <div id={id} ref={timelineRef}>
-      <Timeline
+      {containerReady && <Timeline
         ref={timelineInstanceRef}
         groups={props.groups}
         items={items.filter((item) =>
@@ -457,7 +482,7 @@ const DashCalendarTimeline = (props: Props) => {
               </TimelineHeaders>
             );
           })()}
-      </Timeline>
+      </Timeline>}
       {showContextMenu && <RightClickOutsideHandler {...showContextMenu} />}
       <SelectedItemInfo
         skuAlternativeName={props.sku_alternative_name}
